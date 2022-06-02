@@ -114,12 +114,18 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wave Cannon',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 	},
-	/*"Rin Kaenbyou": {
+	'Rin Kaenbyou': {
 		species: "Torracat", ability: "Cat's Walk", item: "Rinium Z", gender: "F",
 		moves: ["Aura Sphere", "Shadow Ball", "Flamethrower"],
 		signatureMove: "Zombie Fairy",
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: "Timid",
-	},*/
+	},
+	'Roughskull': {
+		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
+		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
+		signatureMove: 'Radiation Stench',
+		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
 	Satori: {
 		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',
 		moves: ['Calm Mind', 'Zap Cannon', 'Psychic'],
@@ -149,12 +155,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Teleport', 'Protect', 'Substitute'],
 		signatureMove: 'Tera Drain',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
-	},
-	'Roughskull': {
-		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
-		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
-		signatureMove: 'Radiation Stench',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
 };
 

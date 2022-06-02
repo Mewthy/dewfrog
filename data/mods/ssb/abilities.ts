@@ -681,5 +681,44 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		name: "Venom Shock",
 		gen: 8,
+	},
+
+	// Rin Kaenbyou
+	"catswalk": {
+		desc: "New typing is Fire/Ghost. This pokemon gains 1 random stat boost for every dead ally on switch-in. Heal +3% HP per turn for every dead ally.",
+		shortDesc: "Fire/Ghost; Gains buffs for each fainted ally.",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Cat\'s Walk');
+			this.add('-start', pokemon, 'typechange', 'Fire/Ghost');
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					let stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in pokemon.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) boost[randomStat] = 1;
+					this.boost(boost);
+				}
+			}
 		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			let healInt = 0;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					healInt += pokemon.maxhp / 33.3;
+				}
+			}
+			if (healInt > 0) this.heal(healInt);
+		},
+		name: "Cat's Walk",
+		gen: 8,
+	},
 };

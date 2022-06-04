@@ -586,7 +586,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let lastFainted = '';
 				moves = [];
 				for (const moveSlot of pokemon.moveSlots) {
-					const moveid = moveSlot.id; const moveid = this.sample(pokemon.moveSlots)
+					const moveid = moveSlot.id;
 					const move = this.dex.moves.get(moveid);
 					if (move.isZ || move.isMax) {
 						continue;

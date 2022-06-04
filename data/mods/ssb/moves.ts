@@ -566,6 +566,100 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
+	// Rin Kaenbyou
+	"zombiefairy": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Uses one random move from each fainted ally. All attacking moves called through this effect have their power halved.",
+		shortDesc: "Uses moves from fainted allies at halved power.",
+		name: "Zombie Fairy",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onHit(target) {
+			let moves = [];
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon === target) continue;
+				if (!pokemon.fainted) continue;
+				let lastFainted = '';
+				moves = [];
+				for (const moveSlot of pokemon.moveSlots) {
+					const moveid = moveSlot.id; const moveid = this.sample(pokemon.moveSlots)
+					const move = this.dex.moves.get(moveid);
+					if (move.isZ || move.isMax) {
+						continue;
+					}
+					moves.push(moveid);
+				}
+				if (!moves.length) {
+					return false;
+				}
+				this.actions.useMove(this.sample(moves), target);
+			}
+		},
+		target: "self",
+		type: "Fairy",
+	},
+
+	// Rin Kaenbyou
+	"rekindlingofdeadashes": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Revives all fainted allies, restoring them to 1 HP each.",
+		shortDesc: "Revives all fainted allies at 1 HP.",
+		name: "Rekindling of Dead Ashes",
+		gen: 8,
+		isZ: "riniumz",
+		pp: 1,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onHit(target) {
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon === target) continue;
+				if (!pokemon.fainted) continue;
+				pokemon.hp = 1;
+				pokemon.fainted = false;
+			}
+			this.add('-message', `The Rekindling of Dead Ashes! ${target}'s allies were brought back to life!`);
+		},
+		target: "self",
+		type: "Fairy",
+	},
+	
+	// Roughskull
+	"radiationstench": {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Power doubles if the target is poisoned, and has a 30% chance to cause the target to flinch.",
+		shortDesc: "Power doubles if the target is poisoned. 30% chance to flinch.",
+		name: "Radiation Stench",
+		pp: 10,
+		priority: 0,
+		volatileStatus: 'gastroacid',
+		flags: {protect: 1, mirror: 1},
+		onBasePower(basePower, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				return this.chainModify(2);
+			}
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'flinch',
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Acid Downpour', target);
+		},
+		target: "normal",
+		type: "Poison",
+	},
+
 	// Satori
 	terrifyinghypnotism: {
 		accuracy: true,
@@ -899,36 +993,5 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "normal",
 		type: "Grass",
-	},
-	
-	// Roughskull
-	"radiationstench": {
-		accuracy: 100,
-		basePower: 120,
-		category: "Physical",
-		desc: "Power doubles if the target is poisoned, and has a 30% chance to cause the target to flinch.",
-		shortDesc: "Power doubles if the target is poisoned. 30% chance to flinch.",
-		name: "Radiation Stench",
-		pp: 10,
-		priority: 0,
-		volatileStatus: 'gastroacid',
-		flags: {protect: 1, mirror: 1},
-		onBasePower(basePower, pokemon, target) {
-			if (target.status === 'psn' || target.status === 'tox') {
-				return this.chainModify(2);
-			}
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Steel') return 1;
-		},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Acid Downpour', target);
-		},
-		target: "normal",
-		type: "Poison",
 	},
 };

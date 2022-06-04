@@ -580,6 +580,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon's Speed is boosted by x1.1. This Pokemon cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
 		shortDesc: "x1.1 Speed; Held item cannot be removed or disabled.",
 		onModifySpePriority: 5,
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "Dexterity");
+    		pokemon.types = ["Normal", "Ghost"];
+		},
 		onModifySpe(spe) {
 			return this.chainModify([4505, 4096]);
 		},
@@ -688,8 +692,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "New typing is Fire/Ghost. This pokemon gains 1 random stat boost for every dead ally on switch-in. Heal +3% HP per turn for every dead ally.",
 		shortDesc: "Fire/Ghost; Gains buffs for each fainted ally.",
 		onStart(pokemon) {
-			this.add('-ability', pokemon, 'Cat\'s Walk');
-			this.add('-start', pokemon, 'typechange', 'Fire/Ghost');
+			this.add("-ability", pokemon, "Cat's Walk");
+    		pokemon.types = ["Fire", "Ghost"];
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.fainted) {
 					let stats: BoostID[] = [];

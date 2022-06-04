@@ -620,10 +620,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const pokemon of target.side.pokemon) {
 				if (pokemon === target) continue;
 				if (!pokemon.fainted) continue;
-				pokemon.hp = 1;
 				pokemon.fainted = false;
+				pokemon.heal(1);
 			}
-			this.add('-message', `The Rekindling of Dead Ashes! ${target}'s allies were brought back to life!`);
+			this.add('-message', `The Rekindling of Dead Ashes! ${target.name}'s allies were brought back to life!`);
 		},
 		target: "self",
 		type: "Fairy",

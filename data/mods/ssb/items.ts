@@ -149,6 +149,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "Heals Poison-types by 1/8 per turn; Damages foes on contact.",
 	},
 
+	// Rin Kaenbyou
+	riniumz: {
+		name: "Rinium Z",
+		spritenum: 632,
+		onTakeItem: false,
+		zMove: "Rekindling of Dead Ashes",
+		zMoveFrom: "Zombie Fairy",
+		itemUser: ["Torracat"],
+		gen: 8,
+		desc: "If held by a Torracat with Zombie Fairy, it can use Rekindling of Dead Ashes.",
+	},
+
  	// Roughskull
 	cheaterglasses: {
 		name: "Cheater Glasses",

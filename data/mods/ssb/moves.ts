@@ -909,6 +909,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		ignoreEvasion: true,
 		ignoreDefensive: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Belly Drum', source);
+			if (source.species.name === 'Hoopa-Unbound') {
+				this.add('-anim', source, 'Wicked Blow', target);
+			}
+		},
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.name === 'Hoopa-Unbound') {
 				move.category = 'Physical';

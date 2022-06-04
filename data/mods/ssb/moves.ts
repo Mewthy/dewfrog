@@ -808,42 +808,34 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		desc: "Taunts, Torments, and Baton Passes if Hoopa; 80BP Physical Dark-type if Hoopa-Unbound. Ignores opposing stat changes.",
-		shortDesc: "Taunt/Torment/BatonPass, Unbound: 80 BP/Phys/Dark.",
+		shortDesc: "Effects vary on forme. Ignores stat changes.",
 		name: "Tap Out",
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
+		ignoreEvasion: true,
+		ignoreDefensive: true,
 		onModifyMove(move, pokemon) {
 			if (pokemon.species.name === 'Hoopa-Unbound') {
 				move.category = 'Physical';
+				move.flags.contact = 1;
 				move.type = 'Dark';
 				move.basePower = 80;
 			} else {
 				move.category = 'Status';
+				move.flags.contact = 0;
 				move.category = 'Ghost';
 				move.basePower = 0;
 			}
 		},
 		onHit(target, source, move) {
-			if (!this.canSwitch(target.side)) {
-				this.attrLastMove('[still]');
-				this.add('-fail', target);
-				return this.NOT_FAIL;
-			}
 			if (source.species.name === 'Hoopa') {
 				target.addVolatile("taunt");
 				target.addVolatile("torment");
+				this.actions.useMove('Baton Pass', source);
 				this.add('-message', 'The Dealer has tapped out!');
-			} else {
-				delete move.selfSwitch;
 			}
 		},
-		self: {
-			onHit(source) {
-				source.skipBeforeSwitchOutEventFlag = true;
-			},
-		},
-		selfSwitch: 'copyvolatile',
 		secondary: null,
 		target: "normal",
 		type: "Ghost",

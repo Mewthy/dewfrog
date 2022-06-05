@@ -180,6 +180,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Metronome', source);
+		},
 		noMetronome: [
 			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
 		],
@@ -203,6 +209,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.actions.useMove(randomMove, target);
 			this.actions.useMove(randomMove2, target);
 			this.actions.useMove(randomMove3, target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+		contestType: "Cool",
+	},
+
+	// Finger
+	fearthefinger: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Picks and uses random moves consecutively until either the user or the target has fainted.",
+		shortDesc: "Uses random moves until user or target faints.",
+		name: "Fear the Finger",
+		isZ: "metronomiumz",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Metronome', source);
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		noMetronome: [
+			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
+		],
+		onHit(target, source, effect) {
+
+			let moveCount = 2;
+			for (const i of moveCount) {
+				if (i <= moveCount) {
+					const moves = this.dex.moves.all().filter(move => (
+						(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
+						!move.realMove && !move.isZ && !move.isMax &&
+						(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+						!effect.noMetronome!.includes(move.name)
+					));
+					let randomMove = '';
+					if (moves.length) {
+						moves.sort((a, b) => a.num - b.num);
+						randomMove = this.sample(moves).id;
+					}
+					if (!randomMove) return false;
+					this.actions.useMove(randomMove, target);
+					// If target is still alive, or else if target has fainted
+					if (target.hp > 0 || !target.fainted) {
+						if (i === moveCount) {
+							moveCount += 1;
+						}
+					} else {
+						break;
+					}
+				}
+			}
 		},
 		secondary: null,
 		target: "self",

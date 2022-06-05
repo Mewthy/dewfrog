@@ -129,6 +129,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
 	},
 
+	// Finger
+	metronomiumz: {
+		name: "Metronomium Z",
+		spritenum: 632,
+		onTakeItem: false,
+		zMove: "Fear the Finger",
+		zMoveFrom: "Mega Metronome",
+		itemUser: ["Reuniclus"],
+		gen: 8,
+		desc: "If held by a Reuniclus with Mega Metronome, it can use Fear the Finger.",
+	},
+
 	// Mink the Putrid
 	gurglingblossom: {
 		name: "Gurgling Blossom",

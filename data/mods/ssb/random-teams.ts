@@ -43,10 +43,10 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	Finger: {
-		species: 'Reuniclus', ability: 'Dual Receptors', item: 'Chaos Ring', gender: 'N',
+		species: 'Reuniclus', ability: 'Dual Receptors', item: 'Metronomium Z', gender: 'N',
 		moves: ['Future Sight', 'Teleport', 'Recover'],
 		signatureMove: 'Mega Metronome',
-		evs: {def: 252, spa: 252, spd: 4}, nature: 'Quiet',
+		evs: {atk: 252, spa: 252, spd: 4}, nature: 'Quiet',
 	},
 	flufi: {
 		species: 'Pikachu-Libre', ability: 'Hero Morale', item: 'Light Ball', gender: 'M',

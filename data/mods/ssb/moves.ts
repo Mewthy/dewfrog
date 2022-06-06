@@ -802,6 +802,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
 			if (special > physical || (physical === special && this.random(2) === 0)) {
 				move.category = 'Special';
+				this.add('-message', `A weak point! Radiation Stench became Special!`);
 			}
 		},
 		onEffectiveness(typeMod, target, type) {
@@ -1098,6 +1099,181 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
+
+	// The Dealer
+	rollthedice: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Special",
+		desc: "Rolls a number between 1-6 and selects a unique effect and base power depending on the number rolled.",
+		shortDesc: "Effects and power are randomly selected.",
+		name: "Roll the Dice",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', target);
+			this.add('-anim', source, 'Wish', source);
+		},
+		onModifyMove(move, pokemon, target) {
+			this.add('-message', 'The Dealer is rolling the dice!');
+			if (pokemon.species.name === 'Hoopa') {
+				const rand = this.random(5);
+				if (rand === 0) {
+					move.basePower = 1;
+					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
+					this.add('-message', 'The dice landed on 1!');
+				} else if (rand === 1) {
+					move.basePower = 40;
+					target.addVolatile('yawn');
+					pokemon.addVolatile('yawn');
+					target.addVolatile('perishsong');
+					pokemon.addVolatile('perishsong');
+					this.add('-message', 'The dice landed on 2!');
+				} else if (rand === 2) {
+					move.basePower = 60;
+					this.actions.useMove("Spikes", target);
+					this.actions.useMove("Future Sight", target);
+					this.add('-message', 'The dice landed on 3!');
+				} else if (rand === 3) {
+					move.basePower = 80;
+					this.actions.useMove("Substitute", pokemon);
+					this.actions.useMove("Trick-or-Treat", target);
+					this.add('-message', 'The dice landed on 4!');
+				} else if (rand === 4) {
+					move.basePower = 100;
+					this.actions.useMove("Jungle Healing", pokemon);
+					this.actions.useMove("Leech Seed", target);
+					this.add('-message', 'The dice landed on 5!');
+				} else {
+					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
+					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
+					this.actions.useMove("Ingrain", pokemon);
+					this.actions.useMove("No Retreat", pokemon);
+					this.actions.useMove("Mean Look", target);
+					this.add('-message', 'The dice landed on 6!');
+					this.actions.useMove("Wicked Blow", target);
+				}
+			} else {
+				move.priority = 2;
+				const rand = this.random(1);
+				if (rand === 0) {
+					this.actions.useMove("Recover", pokemon);
+					let success = false;
+					let i: BoostID;
+					for (i in pokemon.boosts) {
+						if (pokemon.boosts[i] <= 0) continue;
+						let doubledBoosts = pokemon.boosts[i] * 2;
+						if (doubledBoosts > 6) doubledBoosts = 6;
+						pokemon.boosts[i] = doubledBoosts;
+						success = true;
+					}
+					if (!success) return false;
+					this.add('-doubleboost', pokemon, '[from] move: Roll the Dice');
+				} else {
+					pokemon.addVolatile('taunt');
+					let success = false;
+					let i: BoostID;
+					for (i in pokemon.boosts) {
+						if (pokemon.boosts[i] === 0) continue;
+						pokemon.boosts[i] = -pokemon.boosts[i];
+						success = true;
+					}
+					if (!success) return false;
+					this.add('-invertboost', pokemon, '[from] move: Roll the Dice');
+				}
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
+
+	// The Dealer
+	thehousealwayswins: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Rolls a number between 1-6 and selects a unique effect and base power depending on the number rolled.",
+		shortDesc: "Effects and power are randomly selected.",
+		name: "The House Always Wins",
+		isZ: "psychiumz",
+		gen: 8,
+		pp: 1,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', target);
+			this.add('-anim', source, 'Wish', source);
+		},
+		onModifyMove(move, pokemon, target) {
+			this.add('-message', 'The Dealer is rolling two die!');
+			if (pokemon.species.name === 'Hoopa') {
+				const rand1 = this.random(5);
+				const rand2 = this.random(5);
+				if (rand1 === rand2) {
+					if (rand2 <= 2) {
+						rand2 += 1;
+					} else {
+						rand2 -= 1;
+					}
+				}
+				if (rand1 || rand2 === 0) {
+					move.basePower = 1;
+					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
+					this.add('-message', 'A die landed on 1!');
+				} else if (rand1 || rand2 === 1) {
+					move.basePower = 40;
+					target.addVolatile('yawn');
+					pokemon.addVolatile('yawn');
+					target.addVolatile('perishsong');
+					pokemon.addVolatile('perishsong');
+					this.add('-message', 'A die landed on 2!');
+				} else if (rand1 || rand2 === 2) {
+					move.basePower = 60;
+					this.actions.useMove("Spikes", target);
+					this.actions.useMove("Future Sight", target);
+					this.add('-message', 'A die landed on 3!');
+				} else if (rand1 || rand2 === 3) {
+					move.basePower = 80;
+					this.actions.useMove("Substitute", pokemon);
+					this.actions.useMove("Trick-or-Treat", target);
+					this.add('-message', 'A die landed on 4!');
+				} else if (rand1 || rand2 === 4) {
+					move.basePower = 100;
+					this.actions.useMove("Jungle Healing", pokemon);
+					this.actions.useMove("Leech Seed", target);
+					this.add('-message', 'A die landed on 5!');
+				} else {
+					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
+					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
+					this.actions.useMove("Ingrain", pokemon);
+					this.actions.useMove("No Retreat", pokemon);
+					this.actions.useMove("Mean Look", target);
+					this.add('-message', 'The dice landed on 6!');
+					this.actions.useMove("Wicked Blow", target);
+				}
+			} else {
+				move.type = "Dark",
+				move.category = "Physical",
+				move.basePower = 150;
+				move.stealsBoosts = true;
+				pokemon.hp = 0;
+				pokemon.faint();
+			}
+		},
+		secondary: null,
+		stealsBoosts: false,
 		target: "normal",
 		type: "Ghost",
 	},

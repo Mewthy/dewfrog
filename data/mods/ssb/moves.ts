@@ -233,24 +233,25 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Metronome', source);
-			this.add('-anim', source, 'Boomburst', target);
+			this.add('-anim', source, 'Night Shade', target);
 		},
 		noMetronome: [
 			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
 		],
 		onHit(target, source, effect) {
-			// ???
+
 			let moveCount = [1, 2];
-			this.add('-message', `Fear The Finger initiated. moveCount: ${moveCount}`);
 			for (const i of moveCount) {
+
 				if (i <= moveCount.length) {
+
 					const moves = this.dex.moves.all().filter(move => (
 						(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
 						!move.realMove && !move.isZ && !move.isMax &&
 						(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 						!effect.noMetronome!.includes(move.name)
 					));
+
 					let randomMove = '';
 					if (moves.length) {
 						moves.sort((a, b) => a.num - b.num);
@@ -258,16 +259,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					if (!randomMove) return false;
 					this.actions.useMove(randomMove, target);
-					this.add('-message', `Move #${i} finished.`);
-					// If target is still alive, or else if target has fainted
+
 					let foe = target.side.foe.active[0];
+
 					if (foe.hp > 0 || foe && !foe.fainted) {
 						if (i === moveCount.length) {
 							moveCount.push(i + 1);
-							this.add('-message', `Target (${foe}) hasn't fainted; Therefore added move #${moveCount.length} to moveCount. New moveCount: ${moveCount}`);
 						}
-					} else if (foe.fainted || !foe) {
-						this.add('-message', `No target identified (${foe}), target has probably fainted.`);
+					} else if (foe.fainted || !foe || target.fainted || !target) {
 						break;
 					}
 				}
@@ -275,7 +274,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "self",
-		type: "Fairy",
+		type: "Dark",
 		contestType: "Cool",
 	},
 

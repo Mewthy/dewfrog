@@ -675,12 +675,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			move.secondaries.push({
 				chance: 30,
 				status: 'tox',
-				ability: this.getAbility('venomshock'),
+				ability: this.dex.abilities.get('venomshock'),
 			});
 			move.secondaries.push({
 				chance: 30,
 				status: 'par',
-				ability: this.getAbility('venomshock'),
+				ability: this.dex.abilities.get('venomshock'),
 			});
 		},
 		name: "Venom Shock",

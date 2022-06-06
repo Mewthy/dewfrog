@@ -305,6 +305,35 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Psychic",
 	},
 
+	// Hell
+	hadeserinyes: {
+		accuracy: 100,
+		basePower: 30,
+		category: "Special",
+		desc: "Hits 3 times. Each hit has a 20% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "Hits 3 times. 20% chance of SpDef drop per hit.",
+		name: "Hade's Erinyes",
+		gen: 8,
+		pp: 15,
+		priority: 0,
+		flags: {bullet: 1, protect: 1, mirror: 1},
+		multihit: 3,
+		secondary: {
+			chance: 20,
+			boosts: {
+				spd: -1,
+			},
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+
 	// Genwunner
 	psychicbind: {
 		accuracy: 75,
@@ -632,6 +661,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Steel",
+	},
+
+	// Pablo
+	"plagiarize": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Plagiarize",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, bypasssub: 1, allyanim: 1},
+		onHit(target, source) {
+			const disallowedMoves = [
+				'behemothbash', 'behemothblade', 'chatter', 'dynamaxcannon', 'mimic', 'sketch', 'struggle', 'transform',
+			];
+			const move = target.lastMove;
+			if (source.transformed || !move || disallowedMoves.includes(move.id) || source.moves.includes(move.id)) {
+				return false;
+			}
+			if (move.isZ || move.isMax) return false;
+			const mimicIndex = source.moves.indexOf('mimic');
+			if (mimicIndex < 0) return false;
+
+			source.moveSlots[mimicIndex] = {
+				move: move.name,
+				id: move.id,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+				virtual: true,
+			};
+			this.add('-start', source, 'Plagiarize', move.name);
+
+			if (!move || move.isZ) return false;
+			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
+
+			const ppDeducted = target.deductPP(move.id, move.pp);
+			if (!ppDeducted) return false;
+			this.add("-activate", target, 'move: Plagiarize', move.name, ppDeducted);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 	},
 
 	// Rin Kaenbyou

@@ -1216,8 +1216,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon, target) {
 			if (pokemon.species.name === 'Hoopa') {
 				this.add('-message', 'The Dealer is rolling two die!');
-				const rand1 = this.random(6);
-				const rand2 = this.random(6);
+				let rand1 = this.random(6);
+				let rand2 = this.random(6);
 				if (rand1 === rand2) {
 					if (rand2 <= 3) {
 						rand2 += 1;

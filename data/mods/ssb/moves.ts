@@ -1114,6 +1114,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 10,
 		priority: 0,
+		diceRoll: 0,
+		unboundDiceRoll: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1123,65 +1125,89 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Wish', source);
 		},
 		onModifyMove(move, pokemon, target) {
-			this.add('-message', 'The Dealer is rolling the dice!');
 			if (pokemon.species.name === 'Hoopa') {
 				const rand = this.random(6);
 				if (rand === 0) {
 					move.basePower = 1;
-					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
-					this.add('-message', 'The dice landed on 1!');
+					move.diceRoll = 1;
 				} else if (rand === 1) {
 					move.basePower = 60;
-					target.addVolatile('yawn');
-					pokemon.addVolatile('yawn');
-					target.addVolatile('perishsong');
-					pokemon.addVolatile('perishsong');
-					this.add('-message', 'The dice landed on 2!');
+					move.diceRoll = 2;
 				} else if (rand === 2) {
 					move.basePower = 80;
-					this.actions.useMove("Spikes", pokemon);
-					this.actions.useMove("Future Sight", pokemon);
-					this.add('-message', 'The dice landed on 3!');
+					move.diceRoll = 3;
 				} else if (rand === 3) {
 					move.basePower = 100;
-					this.actions.useMove("Substitute", pokemon);
-					this.actions.useMove("Trick-or-Treat", pokemon);
-					this.add('-message', 'The dice landed on 4!');
+					move.diceRoll = 4;
 				} else if (rand === 4) {
 					move.basePower = 120;
-					this.actions.useMove("Jungle Healing", pokemon);
-					this.actions.useMove("Leech Seed", pokemon);
-					this.add('-message', 'The dice landed on 5!');
+					move.diceRoll = 5;
 				} else {
-					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
-					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
-					this.actions.useMove("Ingrain", pokemon);
-					this.actions.useMove("No Retreat", pokemon);
-					this.actions.useMove("Mean Look", pokemon);
-					this.add('-message', 'The dice landed on 6!');
-					this.actions.useMove("Wicked Blow", pokemon);
+					move.diceRoll = 6;
 				}
 			} else {
 				move.priority = 2;
 				const rand = this.random(2);
 				if (rand === 0) {
-					this.actions.useMove("Recover", pokemon);
+					move.unboundDiceRoll = 1;
+				} else {
+					move.unboundDiceRoll = 2;
+				}
+			}
+		},
+		onHit(target, source, move) {
+			this.add('-message', 'The Dealer is rolling the dice!');
+			if (source.species.name === 'Hoopa') {
+				if (move.diceRoll === 1) {
+					this.add('-message', 'The dice landed on 1!');
+					this.add('-message', 'Better luck next time!');
+					this.directDamage(source.maxhp / 4, source, source);
+				} else if (move.diceRoll === 2) {
+					this.add('-message', 'The dice landed on 2!');
+					target.addVolatile('yawn');
+					source.addVolatile('yawn');
+					target.addVolatile('perishsong');
+					source.addVolatile('perishsong');
+				} else if (move.diceRoll === 3) {
+					this.add('-message', 'The dice landed on 3!');
+					this.actions.useMove("Spikes", source);
+					this.actions.useMove("Future Sight", source);
+				} else if (move.diceRoll === 4) {
+					this.add('-message', 'The dice landed on 4!');
+					this.actions.useMove("Substitute", source);
+					this.actions.useMove("Trick-or-Treat", source);
+				} else if (move.diceRoll === 5) {
+					this.add('-message', 'The dice landed on 5!');
+					this.actions.useMove("Jungle Healing", source);
+					this.actions.useMove("Leech Seed", source);
+				} else {
+					this.add('-message', 'The dice landed on 6!');
+					const hoopaForme = source.species.id === 'hoopaunbound' ? '' : '-Unbound';
+					source.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
+					this.actions.useMove("Ingrain", source);
+					this.actions.useMove("No Retreat", source);
+					this.actions.useMove("Mean Look", source);
+					this.actions.useMove("Wicked Blow", source);
+				}
+			} else {
+				if (move.unboundDiceRoll === 1) {
+					this.actions.useMove("Recover", source);
 					let success = false;
 					let i: BoostID;
-					for (i in pokemon.boosts) {
-						if (pokemon.boosts[i] <= 0) continue;
-						pokemon.boosts[i] = pokemon.boosts[i] * 2;
-						if (pokemon.boosts[i] > 6) pokemon.boosts[i] = 6;
+					for (i in source.boosts) {
+						if (source.boosts[i] <= 0) continue;
+						source.boosts[i] = source.boosts[i] * 2;
+						if (source.boosts[i] > 6) source.boosts[i] = 6;
 						success = true;
 					}
 					if (!success) return false;
 				} else {
-					pokemon.addVolatile('taunt');
+					source.addVolatile('taunt');
 					let success = false;
 					let i: BoostID;
-					for (i in pokemon.boosts) {
-						if (pokemon.boosts[i] === 0) continue;
-						pokemon.boosts[i] = -pokemon.boosts[i];
+					for (i in source.boosts) {
+						if (source.boosts[i] === 0) continue;
+						source.boosts[i] = -source.boosts[i];
 						success = true;
 					}
 					if (!success) return false;

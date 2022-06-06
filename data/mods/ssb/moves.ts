@@ -1125,7 +1125,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon, target) {
 			this.add('-message', 'The Dealer is rolling the dice!');
 			if (pokemon.species.name === 'Hoopa') {
-				const rand = this.random(5);
+				const rand = this.random(6);
 				if (rand === 0) {
 					move.basePower = 1;
 					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
@@ -1204,7 +1204,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Rolls a number between 1-6 and selects a unique effect and base power depending on the number rolled.",
 		shortDesc: "Effects and power are randomly selected.",
 		name: "The House Always Wins",
-		isZ: "psychiumz",
+		isZ: "doubleornothing",
 		gen: 8,
 		pp: 1,
 		priority: 0,

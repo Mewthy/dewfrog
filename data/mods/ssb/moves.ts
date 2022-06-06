@@ -1200,7 +1200,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 							boost[statPlus] = source.boosts[statPlus];
 						}
 					}
-					this.boost(boost);
+					this.boost(boost, source, source, null, true);
 					this.add('-message', 'Jackpot! The Dealer\'s stat boosts were doubled!');
 				} else {
 					source.addVolatile('taunt');
@@ -1212,7 +1212,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						success = true;
 					}
 					if (!success) return false;
-					this.add('-invertboost', target, '[from] move: Roll the Dice');
+					this.add('-invertboost', source, '[from] move: Roll the Dice');
 					this.add('-message', 'You\'re the weak link! Better luck next time!');
 				}
 			}

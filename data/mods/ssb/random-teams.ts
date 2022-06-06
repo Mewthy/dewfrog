@@ -139,7 +139,7 @@ export const ssbSets: SSBSets = {
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	'The Dealer': {
-		species: 'Hoopa', ability: 'Croupier', item: 'Psychium Z', gender: 'N',
+		species: 'Hoopa', ability: 'Croupier', item: 'Double or Nothing', gender: 'N',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
 		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Hasty',

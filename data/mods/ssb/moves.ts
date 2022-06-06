@@ -1119,7 +1119,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Agility', target);
+			this.add('-anim', source, 'Agility', source);
 			this.add('-anim', source, 'Wish', source);
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1139,27 +1139,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', 'The dice landed on 2!');
 				} else if (rand === 2) {
 					move.basePower = 60;
-					this.actions.useMove("Spikes", target);
-					this.actions.useMove("Future Sight", target);
+					this.actions.useMove("Spikes", target, pokemon);
+					this.actions.useMove("Future Sight", target, pokemon);
 					this.add('-message', 'The dice landed on 3!');
 				} else if (rand === 3) {
 					move.basePower = 80;
 					this.actions.useMove("Substitute", pokemon);
-					this.actions.useMove("Trick-or-Treat", target);
+					this.actions.useMove("Trick-or-Treat", target, pokemon);
 					this.add('-message', 'The dice landed on 4!');
 				} else if (rand === 4) {
 					move.basePower = 100;
 					this.actions.useMove("Jungle Healing", pokemon);
-					this.actions.useMove("Leech Seed", target);
+					this.actions.useMove("Leech Seed", target, pokemon);
 					this.add('-message', 'The dice landed on 5!');
 				} else {
 					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
 					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
 					this.actions.useMove("Ingrain", pokemon);
 					this.actions.useMove("No Retreat", pokemon);
-					this.actions.useMove("Mean Look", target);
+					this.actions.useMove("Mean Look", target, pokemon);
 					this.add('-message', 'The dice landed on 6!');
-					this.actions.useMove("Wicked Blow", target);
+					this.actions.useMove("Wicked Blow", target, pokemon);
 				}
 			} else {
 				move.priority = 2;
@@ -1241,27 +1241,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.add('-message', 'A die landed on 2!');
 				} else if (rand1 || rand2 === 2) {
 					move.basePower = 60;
-					this.actions.useMove("Spikes", target);
-					this.actions.useMove("Future Sight", target);
+					this.actions.useMove("Spikes", target, pokemon);
+					this.actions.useMove("Future Sight", target, pokemon);
 					this.add('-message', 'A die landed on 3!');
 				} else if (rand1 || rand2 === 3) {
 					move.basePower = 80;
 					this.actions.useMove("Substitute", pokemon);
-					this.actions.useMove("Trick-or-Treat", target);
+					this.actions.useMove("Trick-or-Treat", target, pokemon);
 					this.add('-message', 'A die landed on 4!');
 				} else if (rand1 || rand2 === 4) {
 					move.basePower = 100;
 					this.actions.useMove("Jungle Healing", pokemon);
-					this.actions.useMove("Leech Seed", target);
+					this.actions.useMove("Leech Seed", target, pokemon);
 					this.add('-message', 'A die landed on 5!');
 				} else {
 					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
 					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
 					this.actions.useMove("Ingrain", pokemon);
 					this.actions.useMove("No Retreat", pokemon);
-					this.actions.useMove("Mean Look", target);
+					this.actions.useMove("Mean Look", target, pokemon);
 					this.add('-message', 'A die landed on 6!');
-					this.actions.useMove("Wicked Blow", target);
+					this.actions.useMove("Wicked Blow", target, pokemon);
 				}
 			} else {
 				move.type = "Dark",

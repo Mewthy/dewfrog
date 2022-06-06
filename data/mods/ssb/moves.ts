@@ -1192,15 +1192,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			} else {
 				if (move.unboundDiceRoll === 1) {
 					this.actions.useMove("Recover", source);
-					let success = false;
-					let i: BoostID;
-					for (i in source.boosts) {
-						if (source.boosts[i] <= 0) continue;
-						source.boosts[i] = source.boosts[i] * 2;
-						if (source.boosts[i] > 6) source.boosts[i] = 6;
-						success = true;
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in source.boosts) {
+						if (source.boosts[statPlus] < 0 || source.boosts[statPlus] === 6) continue;
+						if (source.boosts[statPlus] > 0) {
+							boost[statPlus] = source.boosts[statPlus];
+						}
 					}
-					if (!success) return false;
+					this.boost(boost);
+					this.add('-message', 'Jackpot! The Dealer\'s stat boosts were doubled!');
 				} else {
 					source.addVolatile('taunt');
 					let success = false;
@@ -1211,6 +1212,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						success = true;
 					}
 					if (!success) return false;
+					this.add('-invertboost', target, '[from] move: Roll the Dice');
+					this.add('-message', 'You\'re the weak link! Better luck next time!');
 				}
 			}
 		},

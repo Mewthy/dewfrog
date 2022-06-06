@@ -141,6 +141,17 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "If held by a Reuniclus with Mega Metronome, it can use Fear the Finger.",
 	},
 
+	// The Dealer
+	doubleornothing: {
+		name: "Double or Nothing",
+		onTakeItem: false,
+		zMove: "The House Always Wins",
+		zMoveFrom: "Roll the Dice",
+		itemUser: ["Hoopa", "Hoopa-Unbound"],
+		gen: 8,
+		desc: "If held by a Hoopa with Roll the Dice, it can use The House Always Wins.",
+	},
+
 	// Mink the Putrid
 	gurglingblossom: {
 		name: "Gurgling Blossom",

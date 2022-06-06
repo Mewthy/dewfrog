@@ -242,7 +242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, effect) {
 			// ???
 			let moveCount = [1, 2];
-			for (const i of moveCount.length) {
+			for (const i of moveCount) {
 				if (i <= moveCount.length) {
 					const moves = this.dex.moves.all().filter(move => (
 						(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&

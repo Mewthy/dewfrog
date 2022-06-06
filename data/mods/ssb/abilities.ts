@@ -633,6 +633,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return accuracy;
 		},
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.id === 'ominouswind') {
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance *= 2;
+				}
+				if (move.self?.chance) move.self.chance *= 2;
+			}
+		},
 		name: "Croupier",
 		gen: 8,
 	},

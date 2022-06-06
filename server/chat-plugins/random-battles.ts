@@ -648,9 +648,9 @@ function generateSSBInnateInfo(name: string, dex: ModdedDex, baseDex: ModdedDex)
 
 function SSBSets(target: string) {
 	const baseDex = Dex;
-	const dex = Dex.forFormat('gen8superstaffbros4');
+	const dex = Dex.forFormat('gen8superboatbrosmelee');
 	if (!Object.keys(ssbSets).map(toID).includes(toID(target))) {
-		return {e: `Error: ${target.trim()} doesn't have a [Gen 8] Super Staff Bros 4 set.`};
+		return {e: `Error: ${target.trim()} doesn't have a [Gen 8] Super Boat Bros Melee set.`};
 	}
 	let displayName = '';
 	const names = [];

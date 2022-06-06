@@ -1193,7 +1193,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "Dark",
+		type: "???",
 	},
 
 	// The Dealer

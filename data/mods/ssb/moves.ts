@@ -264,6 +264,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						if (i === moveCount.length) {
 							moveCount.push(i + 1);
 							this.add('-message', `Target (${target}) hasn't fainted; Therefore added move #${moveCount.length} to moveCount. New moveCount: ${moveCount}`);
+							this.add('-message', `${target}, ${source}, ${effect}`);
 						}
 					} else if (target.fainted || !target) {
 						this.add('-message', `No target identified (${target}), target has probably fainted.`);
@@ -273,7 +274,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Fairy",
 		contestType: "Cool",
 	},

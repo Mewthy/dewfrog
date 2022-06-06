@@ -242,6 +242,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onHit(target, source, effect) {
 			// ???
 			let moveCount = [1, 2];
+			this.add('-message', `Fear The Finger initiated. moveCount: ${moveCount}`);
 			for (const i of moveCount) {
 				if (i <= moveCount.length) {
 					const moves = this.dex.moves.all().filter(move => (
@@ -257,11 +258,15 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 					if (!randomMove) return false;
 					this.actions.useMove(randomMove, target);
+					this.add('-message', `Move #${i} finished.`);
 					// If target is still alive, or else if target has fainted
-					if (target.hp > 0 || !target.fainted) {
+					if (target.hp > 0 || !target.fainted || !target) {
 						if (i === moveCount.length) {
 							moveCount.push(i + 1);
+							this.add('-message', `Target hasn't fainted; Therefore added move #${moveCount.length} to moveCount. New moveCount: ${moveCount}`);
 						}
+					} else {
+						this.add('-message', `No target identified, target has probably fainted.`);
 					}
 				}
 			}

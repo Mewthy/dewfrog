@@ -1216,6 +1216,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon, target) {
 			if (pokemon.species.name === 'Hoopa') {
 				this.add('-message', 'The Dealer is rolling two die!');
+				let movesUsed = 0;
 				let rand1 = this.random(6);
 				let rand2 = this.random(6);
 				if (rand1 === rand2) {
@@ -1225,33 +1226,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						rand2 -= 1;
 					}
 				}
-				if (rand1 || rand2 === 0) {
+				if (movesUsed < 2 && rand1 || rand2 === 0) {
+					if (movesUsed >= 2) return false;
 					move.basePower = 1;
 					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
 					this.add('-message', 'A die landed on 1!');
-				} else if (rand1 || rand2 === 1) {
+					movesUsed += 1;
+				} else if (movesUsed < 2 && rand1 || rand2 === 1) {
+					if (movesUsed >= 2) return false;
 					move.basePower = 60;
 					target.addVolatile('yawn');
 					pokemon.addVolatile('yawn');
 					target.addVolatile('perishsong');
 					pokemon.addVolatile('perishsong');
 					this.add('-message', 'A die landed on 2!');
-				} else if (rand1 || rand2 === 2) {
+					movesUsed += 1;
+				} else if (movesUsed < 2 && rand1 || rand2 === 2) {
+					if (movesUsed >= 2) return false;
 					move.basePower = 80;
 					this.actions.useMove("Spikes", pokemon);
 					this.actions.useMove("Future Sight", pokemon);
 					this.add('-message', 'A die landed on 3!');
-				} else if (rand1 || rand2 === 3) {
+					movesUsed += 1;
+				} else if (movesUsed < 2 && rand1 || rand2 === 3) {
+					if (movesUsed >= 2) return false;
 					move.basePower = 100;
 					this.actions.useMove("Substitute", pokemon);
 					this.actions.useMove("Trick-or-Treat", pokemon);
 					this.add('-message', 'A die landed on 4!');
-				} else if (rand1 || rand2 === 4) {
+					movesUsed += 1;
+				} else if (movesUsed < 2 && rand1 || rand2 === 4) {
+					if (movesUsed >= 2) return false;
 					move.basePower = 120;
 					this.actions.useMove("Jungle Healing", pokemon);
 					this.actions.useMove("Leech Seed", pokemon);
 					this.add('-message', 'A die landed on 5!');
-				} else {
+					movesUsed += 1;
+				} else if (movesUsed < 2 && rand1 || rand2 === 5) {
+					if (movesUsed >= 2) return false;
 					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
 					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
 					this.actions.useMove("Ingrain", pokemon);
@@ -1259,6 +1271,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.actions.useMove("Mean Look", pokemon);
 					this.add('-message', 'A die landed on 6!');
 					this.actions.useMove("Wicked Blow", pokemon);
+					movesUsed += 1;
 				}
 			} else {
 				move.type = "Dark",

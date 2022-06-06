@@ -1193,7 +1193,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		secondary: null,
 		target: "normal",
-		type: "???",
+		type: "Dark",
 	},
 
 	// The Dealer
@@ -1219,10 +1219,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onModifyMove(move, pokemon, target) {
 			this.add('-message', 'The Dealer is rolling two die!');
 			if (pokemon.species.name === 'Hoopa') {
-				const rand1 = this.random(5);
-				const rand2 = this.random(5);
+				const rand1 = this.random(6);
+				const rand2 = this.random(6);
 				if (rand1 === rand2) {
-					if (rand2 <= 2) {
+					if (rand2 <= 3) {
 						rand2 += 1;
 					} else {
 						rand2 -= 1;
@@ -1260,7 +1260,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.actions.useMove("Ingrain", pokemon);
 					this.actions.useMove("No Retreat", pokemon);
 					this.actions.useMove("Mean Look", target);
-					this.add('-message', 'The dice landed on 6!');
+					this.add('-message', 'A die landed on 6!');
 					this.actions.useMove("Wicked Blow", target);
 				}
 			} else {
@@ -1268,8 +1268,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				move.category = "Physical",
 				move.basePower = 150;
 				move.stealsBoosts = true;
-				pokemon.hp = 0;
-				pokemon.faint();
+			}
+		},
+		onHit(target, source, move) {
+			if (source.species.name === "Hoopa-Unbound") {
+				source.hp = 0;
+				source.faint();
 			}
 		},
 		secondary: null,

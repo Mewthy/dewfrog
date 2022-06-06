@@ -1119,7 +1119,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Topsy Turvy', source);
 			this.add('-anim', source, 'Wish', source);
 		},
 		onModifyMove(move, pokemon, target) {
@@ -1198,8 +1198,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Rolls a number between 1-6 and selects a unique effect and base power depending on the number rolled.",
-		shortDesc: "Effects and power are randomly selected.",
+		desc: "If Hoopa, uses Roll the Dice twice. If Hoopa-Unbound, becomes Dark-type, Phyiscal, 150 BP, steals stat boosts before dealing damage, and the user faints.",
+		shortDesc: "Effects and power depend on form.",
 		name: "The House Always Wins",
 		isZ: "doubleornothing",
 		gen: 8,
@@ -1210,70 +1210,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Agility', target);
-			this.add('-anim', source, 'Wish', source);
+			this.add('-anim', source, 'Topsy Turvy', source);
+			this.add('-anim', source, 'Night Shade', target);
 		},
 		onModifyMove(move, pokemon, target) {
-			if (pokemon.species.name === 'Hoopa') {
-				this.add('-message', 'The Dealer is rolling two die!');
-				let movesUsed = 0;
-				let rand1 = this.random(6);
-				let rand2 = this.random(6);
-				if (rand1 === rand2) {
-					if (rand2 <= 3) {
-						rand2 += 1;
-					} else {
-						rand2 -= 1;
-					}
-				}
-				if (movesUsed < 2 && rand1 || rand2 === 0) {
-					if (movesUsed >= 2) return false;
-					move.basePower = 1;
-					this.directDamage(pokemon.maxhp / 4, pokemon, pokemon);
-					this.add('-message', 'A die landed on 1!');
-					movesUsed += 1;
-				} else if (movesUsed < 2 && rand1 || rand2 === 1) {
-					if (movesUsed >= 2) return false;
-					move.basePower = 60;
-					target.addVolatile('yawn');
-					pokemon.addVolatile('yawn');
-					target.addVolatile('perishsong');
-					pokemon.addVolatile('perishsong');
-					this.add('-message', 'A die landed on 2!');
-					movesUsed += 1;
-				} else if (movesUsed < 2 && rand1 || rand2 === 2) {
-					if (movesUsed >= 2) return false;
-					move.basePower = 80;
-					this.actions.useMove("Spikes", pokemon);
-					this.actions.useMove("Future Sight", pokemon);
-					this.add('-message', 'A die landed on 3!');
-					movesUsed += 1;
-				} else if (movesUsed < 2 && rand1 || rand2 === 3) {
-					if (movesUsed >= 2) return false;
-					move.basePower = 100;
-					this.actions.useMove("Substitute", pokemon);
-					this.actions.useMove("Trick-or-Treat", pokemon);
-					this.add('-message', 'A die landed on 4!');
-					movesUsed += 1;
-				} else if (movesUsed < 2 && rand1 || rand2 === 4) {
-					if (movesUsed >= 2) return false;
-					move.basePower = 120;
-					this.actions.useMove("Jungle Healing", pokemon);
-					this.actions.useMove("Leech Seed", pokemon);
-					this.add('-message', 'A die landed on 5!');
-					movesUsed += 1;
-				} else if (movesUsed < 2 && rand1 || rand2 === 5) {
-					if (movesUsed >= 2) return false;
-					const hoopaForme = pokemon.species.id === 'hoopaunbound' ? '' : '-Unbound';
-					pokemon.formeChange('Hoopa' + hoopaForme, this.effect, false, '[msg]');
-					this.actions.useMove("Ingrain", pokemon);
-					this.actions.useMove("No Retreat", pokemon);
-					this.actions.useMove("Mean Look", pokemon);
-					this.add('-message', 'A die landed on 6!');
-					this.actions.useMove("Wicked Blow", pokemon);
-					movesUsed += 1;
-				}
-			} else {
+			if (pokemon.species.name === 'Hoopa-Unbound') {
 				move.type = "Dark",
 				move.category = "Physical",
 				move.basePower = 150;
@@ -1281,6 +1222,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onHit(target, source, move) {
+			if (source.species.name === "Hoopa") {
+				this.actions.useMove("Roll the Dice", source);
+				this.actions.useMove("Roll the Dice", source);
+			}
 			if (source.species.name === "Hoopa-Unbound") {
 				source.hp = 0;
 				source.faint();

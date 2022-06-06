@@ -226,7 +226,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Fear the Finger",
 		isZ: "metronomiumz",
 		gen: 8,
-		pp: 10,
+		pp: 1,
 		priority: 0,
 		flags: {},
 		onTryMove() {
@@ -240,10 +240,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			"After You", "Assist", "Aura Wheel", "Baneful Bunker", "Beak Blast", "Belch", "Bestow", "Celebrate", "Clangorous Soul", "Copycat", "Counter", "Covet", "Crafty Shield", "Decorate", "Destiny Bond", "Detect", "Endure", "Eternabeam", "False Surrender", "Feint", "Focus Punch", "Follow Me", "Freeze Shock", "Helping Hand", "Hold Hands", "Hyperspace Fury", "Hyperspace Hole", "Ice Burn", "Instruct", "King's Shield", "Light of Ruin", "Mat Block", "Me First", "Metronome", "Mimic", "Mirror Coat", "Mirror Move", "Obstruct", "Overdrive", "Photon Geyser", "Plasma Fists", "Precipice Blades", "Protect", "Pyro Ball", "Quash", "Quick Guard", "Rage Powder", "Relic Song", "Secret Sword", "Shell Trap", "Sketch", "Sleep Talk", "Snap Trap", "Snarl", "Snatch", "Snore", "Spectral Thief", "Spiky Shield", "Spirit Break", "Spotlight", "Struggle", "Switcheroo", "Transform", "Wide Guard",
 		],
 		onHit(target, source, effect) {
-
-			let moveCount = 2;
-			for (const i of moveCount) {
-				if (i <= moveCount) {
+			// ???
+			let moveCount = [1, 2];
+			for (const i of moveCount.length) {
+				if (i <= moveCount.length) {
 					const moves = this.dex.moves.all().filter(move => (
 						(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
 						!move.realMove && !move.isZ && !move.isMax &&
@@ -259,11 +259,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.actions.useMove(randomMove, target);
 					// If target is still alive, or else if target has fainted
 					if (target.hp > 0 || !target.fainted) {
-						if (i === moveCount) {
-							moveCount += 1;
+						if (i === moveCount.length) {
+							moveCount.push(i + 1);
 						}
-					} else {
-						break;
 					}
 				}
 			}
@@ -698,7 +696,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
-		desc: "Power doubles if the target is poisoned, has a 30% chance to cause the target to flinch, and supresses the target's ability.",
+		desc: "Power doubles if the target is poisoned, has a 30% chance to cause the target to flinch, and supresses the target's ability. Move will be either Physical or Special depending on which is stronger.",
 		shortDesc: "Power doubles if foe poisoned. 30% flinch chance.",
 		name: "Radiation Stench",
 		pp: 10,
@@ -708,6 +706,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chainModify(2);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			const atk = pokemon.getStat('atk', false, true);
+			const spa = pokemon.getStat('spa', false, true);
+			const def = target.getStat('def', false, true);
+			const spd = target.getStat('spd', false, true);
+			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
+			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
+			if (special > physical || (physical === special && this.random(2) === 0)) {
+				move.category = 'Special';
 			}
 		},
 		onEffectiveness(typeMod, target, type) {

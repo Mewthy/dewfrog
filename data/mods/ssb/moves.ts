@@ -260,7 +260,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.actions.useMove(randomMove, target);
 					this.add('-message', `Move #${i} finished.`);
 					// If target is still alive, or else if target has fainted
-					let foe = target.side.foe;
+					let foe = target.side.foe.active[0];
 					if (foe.hp > 0 || foe && !foe.fainted) {
 						if (i === moveCount.length) {
 							moveCount.push(i + 1);

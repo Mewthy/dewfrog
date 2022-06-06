@@ -1163,20 +1163,18 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				}
 			} else {
 				move.priority = 2;
-				const rand = this.random(1);
+				const rand = this.random(2);
 				if (rand === 0) {
 					this.actions.useMove("Recover", pokemon);
 					let success = false;
 					let i: BoostID;
 					for (i in pokemon.boosts) {
 						if (pokemon.boosts[i] <= 0) continue;
-						let doubledBoosts = pokemon.boosts[i] * 2;
-						if (doubledBoosts > 6) doubledBoosts = 6;
-						pokemon.boosts[i] = doubledBoosts;
+						pokemon.boosts[i] = pokemon.boosts[i] * 2;
+						if (pokemon.boosts[i] > 6) pokemon.boosts[i] = 6;
 						success = true;
 					}
 					if (!success) return false;
-					this.add('-doubleboost', pokemon, '[from] move: Roll the Dice');
 				} else {
 					pokemon.addVolatile('taunt');
 					let success = false;
@@ -1187,7 +1185,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						success = true;
 					}
 					if (!success) return false;
-					this.add('-invertboost', pokemon, '[from] move: Roll the Dice');
 				}
 			}
 		},
@@ -1217,8 +1214,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Wish', source);
 		},
 		onModifyMove(move, pokemon, target) {
-			this.add('-message', 'The Dealer is rolling two die!');
 			if (pokemon.species.name === 'Hoopa') {
+				this.add('-message', 'The Dealer is rolling two die!');
 				const rand1 = this.random(6);
 				const rand2 = this.random(6);
 				if (rand1 === rand2) {

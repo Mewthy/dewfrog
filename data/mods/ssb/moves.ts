@@ -260,14 +260,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.actions.useMove(randomMove, target);
 					this.add('-message', `Move #${i} finished.`);
 					// If target is still alive, or else if target has fainted
+					effect.target = "normal";
 					if (target.hp > 0 || target && !target.fainted) {
 						if (i === moveCount.length) {
 							moveCount.push(i + 1);
 							this.add('-message', `Target (${target}) hasn't fainted; Therefore added move #${moveCount.length} to moveCount. New moveCount: ${moveCount}`);
 							this.add('-message', `${target}, ${source}, ${effect}`);
+							effect.target = "self";
 						}
 					} else if (target.fainted || !target) {
 						this.add('-message', `No target identified (${target}), target has probably fainted.`);
+						effect.target = "self";
 						break;
 					}
 				}

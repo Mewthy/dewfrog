@@ -783,6 +783,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		priority: 0,
 		volatileStatus: 'gastroacid',
 		flags: {protect: 1, mirror: 1},
+		ignoreImmunity: true,
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chainModify(2);

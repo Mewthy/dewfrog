@@ -30,6 +30,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Masochism',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	'☆Chandie': {
+		species: 'Chandelure', ability: 'Grasp the Flame', item: 'Phantom Presence', gender: 'M',
+		moves: ['Recover', 'Focus Blast', 'Hex'],
+		signatureMove: 'Conflagration',
+		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
+	},
 	'Chocolate Pudding': {
 		species: 'Drowzee', ability: 'Fudge-Filled Body', item: 'Parfait Spoon', gender: 'M',
 		moves: ['Glacial Lance', 'Drain Punch', 'Photon Geyser'],
@@ -63,7 +69,7 @@ export const ssbSets: SSBSets = {
 	Hell: {
 		species: "Gengar", ability: "Sinner's Punishment", item: "Air Blimp", gender: "M",
 		moves: ["Thunderbolt", "Dark Pulse", "Flamethrower"],
-		signatureMove: "Hade's Erinyes",
+		signatureMove: "Hades' Erinyes",
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
 	Horrific17: {

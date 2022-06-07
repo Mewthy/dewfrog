@@ -34,7 +34,7 @@ export const ssbSets: SSBSets = {
 		species: 'Chandelure', ability: 'Grasp the Flame', item: 'Phantom Presence', gender: 'M',
 		moves: ['Recover', 'Focus Blast', 'Hex'],
 		signatureMove: 'Conflagration',
-		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
+		evs: {hp: 252, spa: 4, spe: 252}, happiness: 0, nature: 'Timid',
 	},
 	'Chocolate Pudding': {
 		species: 'Drowzee', ability: 'Fudge-Filled Body', item: 'Parfait Spoon', gender: 'M',

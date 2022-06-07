@@ -635,6 +635,39 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		contestType: "Clever",
 	},
 
+	// Neptune
+	goldenorder: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Golden Order effect starts for the user; Halves damage taken from attacks, makes the user always move last, and allows use of Faith Fray the Damned.",
+		shortDesc: "Starts Golden Order for the user.",
+		name: "Golden Order",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		volatileStatus: 'goldenorder',
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Golden Order');
+				pokemon.m.nowShiny = true;
+				changeSet(this, pokemon, ssbSets['Golden Neptune']);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Golden Order');
+				pokemon.m.nowShiny = false;
+			},
+			onRestart(pokemon) {
+				pokemon.removeVolatile('Golden Order');
+				pokemon.m.nowShiny = false;
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Flying",
+	},
+
 	// Omega
 	wavecannon: {
 		accuracy: true,

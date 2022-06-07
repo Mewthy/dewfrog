@@ -647,6 +647,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 5,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Aerial Ace', target);
+		},
 		volatileStatus: 'goldenorder',
 		condition: {
 			onStart(pokemon) {
@@ -690,6 +697,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		flags: {},
 		ignoreImmunity: true,
 		selfdestruct: "ifHit",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			this.add('-anim', source, 'Pulverizing Pancake', target);
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (target.hasType('Ghost')) {
 				return 1;

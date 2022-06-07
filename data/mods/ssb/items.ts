@@ -163,22 +163,22 @@ export const Items: {[k: string]: ModdedItemData} = {
 	// Neptune
 	peacetalisman: {
 		name: "Peace Talisman",
-		basePowerCallback(pokemon, target, move) {
-			const damagedByTarget = pokemon.attackedBy.some(
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			const damagedByTarget = user.attackedBy.some(
 				p => p.source === target && p.damage > 0 && p.thisTurn
 			);
 			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
-				return move.basePower * 1.25;
+				return this.chainModify(1.25);
 			} else {
 				if (move.id === "faithfraythedamned") {
-					return move.basePower;
+					return;
 				} else {
 					this.debug('Weakened for not getting hit');
-					return move.basePower * 0.75;
+					return this.chainModify(0.75);
 				}
 			}
-			return move.basePower;
 		},
 		gen: 8,
 		desc: "Attacks deal 1.25x damage if the target attacks the user first; 0.75x damage if the user moves first or if the target doesn't attack.",

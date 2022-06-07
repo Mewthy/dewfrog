@@ -2115,7 +2115,7 @@ export const Formats: FormatList = [
 		ruleset: ['Flat Rules'],
 	},
 	{
-		name: "[Gen 8] Super Boat Bros Melee",
+		name: "[Gen 8] Super Boat Bros Ultimate",
 		desc: "The first iteration of the Super Boat Bros series. Use /ssb to see each character and their set.",
 
 		mod: 'ssb',

@@ -593,13 +593,31 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Neptune
 	goldpinion: {
-		desc: "The holder's charge attacks skip their charge turn and become 1-turn attacks.",
+		desc: "The holder's charge attacks skip their charge turn and become 1-turn attacks. Summons strong winds.",
 		shortDesc: "Holder's charge attacks become 1-turn.",
 		onModifyMove(move, pokemon, target) {
 			if (move.flags['charge']) {
 				this.add('-activate', pokemon, 'ability: Gold Pinion');
 				move.flags.charge = 0;
 			}
+		},
+		onStart(source) {
+			this.field.setWeather('deltastream');
+		},
+		onAnySetWeather(target, source, weather) {
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
 		},
 		isBreakable: true,
 		name: "Gold Pinion",

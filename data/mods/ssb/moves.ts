@@ -283,8 +283,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
-		desc: "This move will critically hit; confuses the target.",
-		shortDesc: "Critical; confuse.",
+		desc: "Always results in a critical hit; confuses the target.",
+		shortDesc: "Critical hits and confuses target.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -654,18 +654,64 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.m.nowShiny = true;
 				changeSet(this, pokemon, ssbSets['Golden Neptune']);
 			},
+			onSourceModifyDamage(damage, source, target, move) {
+				return this.chainModify(0.5);
+			},
+			onModifyPriority(priority, pokemon, target, move) {
+				return priority - 5;
+			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Golden Order');
 				pokemon.m.nowShiny = false;
+				changeSet(this, pokemon, ssbSets['Neptune']);
 			},
 			onRestart(pokemon) {
 				pokemon.removeVolatile('Golden Order');
 				pokemon.m.nowShiny = false;
+				changeSet(this, pokemon, ssbSets['Neptune']);
 			},
 		},
 		secondary: null,
 		target: "self",
 		type: "Flying",
+	},
+
+	// Neptune
+	faithfraythedamned: {
+		accuracy: 100,
+		basePower: 200,
+		category: "Physical",
+		desc: "Ignores resistances and immunities, hits Ghost-types supereffectively. User faints, replacement's Speed and Defense are raised by 1.",
+		shortDesc: "Ignores resistances. User faints.",
+		name: "Faith Fray the Damned",
+		gen: 8,
+		pp: 1,
+		priority: 0,
+		flags: {},
+		ignoreImmunity: true,
+		selfdestruct: "ifHit",
+		onEffectiveness(typeMod, target, type, move) {
+			if (target.hasType('Ghost')) {
+				return 1;
+			} else {
+				return 0;
+			}
+		},
+		self: {
+			sideCondition: 'faithfraythedamned',
+		},
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'move: Faith Fray the Damned');
+			},
+			onSwitchInPriority: -1,
+			onSwitchIn(target) {
+				this.boost({def: 1, spe: 1}, target);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 	},
 
 	// Omega

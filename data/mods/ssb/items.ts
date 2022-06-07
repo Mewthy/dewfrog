@@ -17,6 +17,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "Raises Speed by 1 stage and critical hit ratio by 2 stages. Single use.",
 	},
 
+	// ☆Chandie
+	phantompresence: {
+		name: "Phantom Presence",
+		spritenum: 459,
+		fling: {
+			basePower: 10,
+		},
+		onTryHit(pokemon, source, move) {
+			if (pokemon !== source && move.type === 'Ground') {
+				this.add('-immune', pokemon, '[from] item: Phantom Presence');
+				return null;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (move.flags['contact']) mod /= 2;
+			return this.chainModify(mod);
+		},
+		gen: 8,
+		desc: "Holder is immune to hazards and Ground-type attacks; takes 0.5x damage from contact.",
+	},
+
 	// Chocolate Pudding
 	parfaitspoon: {
 		name: "Parfait Spoon",
@@ -103,7 +125,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		gen: 8,
-		desc: "Holder's immune to ground types moves and ignores weather.",
+		desc: "Holder is immune to Ground-type attacks and ignores weather.",
 	},
 
 	// Horrific17
@@ -134,8 +156,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		gen: 8,
-		desc: "Each turn, if holder is a Poison type, restores 1/8 max HP. If holder is hit by a contact move, the attacker loses 1/8 of its max HP.",
-		shortDesc: "Heals Poison-types by 1/8 per turn; Damages foes on contact.",
+		desc: "Each turn, holder restores 1/8 of max HP if Poison-type. Attacker loses 1/8 of max HP if contact is made.",
 	},
 
 	// Neptune
@@ -157,7 +178,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		gen: 8,
 		desc: "Weather-based attacks used by the holder have their accuracy and power increased by 1.33x.",
-		shortDesc: "Weather-based moves have 1.33x power/accuracy.",
 	},
 
 	// Neptune
@@ -181,8 +201,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		gen: 8,
-		desc: "Attacks deal 1.25x damage if the target attacks the user first; 0.75x damage if the user moves first or if the target doesn't attack.",
-		shortDesc: "User attacked before moving: 1.25x power; 0.75x otherwise.",
+		desc: "Attacks deal 1.25x damage if holder is damaged by foe first; else 0.75x damage.",
 	},
 
 	// Rin Kaenbyou
@@ -233,8 +252,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		gen: 8,
-		desc: "On switch-in, the user raises its Attack or Special Attack depending on if the opponent's Defense or Special Defense is lower, and raises either Defense or Special Defense the Pokemon's highest Attack stat (Physical or Special).  At full HP, this Pokemon reduces the damage of the first hit by half.",
-		shortDesc: "Raises Atk or SpA based on lower Def, Raises Def or SpD based on higher Atk, halves damage taken if at full HP.",
+		desc: "On switch-in, holder raises its Attack or Special Attack depending on foe's lower Defense stat, and raises Defense or Special Defense depending on foe's higher Attack stat.  At full HP, this Pokemon takes 0.5x damage from attacks.",
  	},
 
 	// Satori
@@ -276,8 +294,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		gen: 8,
-		desc: "Holder's single-hit moves of 60 power or less have 20 power and hit 2-5 times instead.",
-		shortDesc: "Moves <= 60 BP become 20 BP, hit 2-5 times.",
+		desc: "Holder's single-hit moves of <= 60 BP have 20 BP and hit 2-5 times instead.",
 	},
 
 	// The Dealer

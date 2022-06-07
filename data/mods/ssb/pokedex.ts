@@ -24,6 +24,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 135, atk: 35, def: 55, spa: 35, spd: 55, spe: 80},
 	},
+	// Neptune
+	pidgeot: {
+		inherit: true,
+		baseStats: {hp: 83, atk: 101, def: 75, spa: 101, spd: 70, spe: 101},
+	},
 	// Mechagodzilla
 	pokestarmt2: {
 		inherit: true,

@@ -779,6 +779,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Venom Shock",
 		gen: 8,
 	},
+	
+	// Ruffbot
+	"rngscript": {
+		desc: "This Pokemon move's that have secondary effects are guaranteed to activate.",
+		shortDesc: "Guarantees second effects to activate.",
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = true;
+				}
+			}
+			if (move.self?.chance) move.self.chance = true;
+		},
+		name: "RNG Script",
+		gen: 8,
+	},
 
 	// Rin Kaenbyou
 	"catswalk": {

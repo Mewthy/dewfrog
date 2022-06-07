@@ -60,12 +60,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Psychic Bind',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Serious',
 	},
-	/*Hell: {
+	Hell: {
 		species: "Gengar", ability: "Sinner's Punishment", item: "Air Blimp", gender: "M",
 		moves: ["Thunderbolt", "Dark Pulse", "Flamethrower"],
 		signatureMove: "Hade's Erinyes",
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
-	},*/
+	},
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
 		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],

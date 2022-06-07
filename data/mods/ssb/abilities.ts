@@ -297,6 +297,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Hell
+	sinnerspunishment: {
+		desc: "New typing is Dark/Fire/Ghost. The user's attacks inflict a Hell Scar on the target.",
+		shortDesc: "Dark/Fire/Ghost; Attacks inflict Hell Scars.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "Sinner's Punishment");
+    		pokemon.types = ["Dark", "Fire", "Ghost"];
+		},
+		onModifyMove(move) {
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 100,
+				volatileStatus: 'hellscar',
+			});
+		},
+		name: "Sinner's Punishment",
+		gen: 8,
+	},
+
 	// Horrific17
 	fairfight: {
 		desc: "This Pokemon uses Fairy Lock, Haze, and Magic Room on switch-in.",

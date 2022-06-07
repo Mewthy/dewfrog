@@ -599,7 +599,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.flags['charge']) {
 				this.add('-activate', pokemon, 'ability: Gold Pinion');
 				move.flags.charge = 0;
-			},
+			}
 		},
 		isBreakable: true,
 		name: "Gold Pinion",

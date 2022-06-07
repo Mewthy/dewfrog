@@ -171,8 +171,12 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 1.25;
 			} else {
-				this.debug('Weakened for not getting hit');
-				return move.basePower * 0.75;
+				if (move.id === "faithfraythedamned") {
+					return move.basePower;
+				} else {
+					this.debug('Weakened for not getting hit');
+					return move.basePower * 0.75;
+				}
 			}
 			return move.basePower;
 		},

@@ -146,14 +146,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 			const weather = ["hurricane", "thunder", "blizzard", "weatherball", "solarbeam", "solarblade"];
 			if (weather.includes(move.id)) {
 				return this.chainModify([5448, 4096]);
-			},
+			}
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
 			const weather = ["hurricane", "thunder", "blizzard", "weatherball", "solarbeam", "solarblade"];
 			if (weather.includes(move.id)) {
 				return this.chainModify([5448, 4096]);
-			},
+			}
 		},
 		gen: 8,
 		desc: "Weather-based attacks used by the holder have their accuracy and power increased by 1.33x.",

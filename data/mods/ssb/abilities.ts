@@ -561,6 +561,51 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Neptune
+	silverpinion: {
+		desc: "The holder takes 3/4 damage from attacks and summons strong winds on switch-in.",
+		shortDesc: "Takes 3/4 damage; Summons strong winds.",
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.chainModify(0.75);
+		},
+		onStart(source) {
+			this.field.setWeather('deltastream');
+		},
+		onAnySetWeather(target, source, weather) {
+			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherState.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherState.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+		isBreakable: true,
+		name: "Silver Pinion",
+		gen: 8,
+	},
+
+	// Neptune
+	goldpinion: {
+		desc: "The holder's charge attacks skip their charge turn and become 1-turn attacks.",
+		shortDesc: "Holder's charge attacks become 1-turn.",
+		onModifyMove(move, pokemon, target) {
+			if (move.flags['charge']) {
+				this.add('-activate', pokemon, 'ability: Gold Pinion');
+				move.flags.charge = 0;
+			},
+		},
+		isBreakable: true,
+		name: "Gold Pinion",
+		gen: 8,
+	},
+
 	// Omega
 	burnheal: {
 		desc: "This Pokemon heals 1/8 of max HP per turn when burned.",

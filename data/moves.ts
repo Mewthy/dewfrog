@@ -16692,7 +16692,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasItem('stealthrock')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasItem('phantompresence')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
 			},

@@ -30,12 +30,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Masochism',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
-	'☆Chandie': {
+	/*'☆Chandie': {
 		species: 'Chandelure', ability: 'Grasp the Flame', item: 'Phantom Presence', gender: 'M',
 		moves: ['Recover', 'Focus Blast', 'Hex'],
 		signatureMove: 'Conflagration',
 		evs: {hp: 252, spa: 4, spe: 252}, happiness: 0, nature: 'Timid',
-	},
+	},*/
 	'Chocolate Pudding': {
 		species: 'Drowzee', ability: 'Fudge-Filled Body', item: 'Parfait Spoon', gender: 'M',
 		moves: ['Glacial Lance', 'Drain Punch', 'Photon Geyser'],

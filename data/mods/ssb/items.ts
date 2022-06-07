@@ -31,9 +31,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			let mod = 1;
-			if (move.flags['contact']) mod /= 2;
-			return this.chainModify(mod);
+			if (move.flags['contact']) return this.chainModify(0.5);
 		},
 		gen: 8,
 		desc: "Holder is immune to hazards and Ground-type attacks; takes 0.5x damage from contact.",

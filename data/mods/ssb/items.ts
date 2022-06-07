@@ -160,6 +160,27 @@ export const Items: {[k: string]: ModdedItemData} = {
 		shortDesc: "Weather-based moves have 1.33x power/accuracy.",
 	},
 
+	// Neptune
+	peacetalisman: {
+		name: "Peace Talisman",
+		basePowerCallback(pokemon, target, move) {
+			const damagedByTarget = pokemon.attackedBy.some(
+				p => p.source === target && p.damage > 0 && p.thisTurn
+			);
+			if (damagedByTarget) {
+				this.debug('Boosted for getting hit by ' + target);
+				return move.basePower * 1.25;
+			} else {
+				this.debug('Weakened for not getting hit');
+				return move.basePower * 0.75;
+			}
+			return move.basePower;
+		},
+		gen: 8,
+		desc: "Attacks deal 1.25x damage if the target attacks the user first; 0.75x damage if the user moves first or if the target doesn't attack.",
+		shortDesc: "User attacked before moving: 1.25x power; 0.75x otherwise.",
+	},
+
 	// Rin Kaenbyou
 	riniumz: {
 		name: "Rinium Z",

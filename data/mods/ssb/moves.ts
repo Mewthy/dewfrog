@@ -659,7 +659,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Golden Order');
 				pokemon.m.nowShiny = true;
-				changeSet(this, pokemon, ssbSets['Golden Neptune']);
+				changeSet(this, pokemon, ssbSets['Golden Neptune'], true);
 			},
 			onSourceModifyDamage(damage, source, target, move) {
 				return this.chainModify(0.5);
@@ -670,12 +670,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Golden Order');
 				pokemon.m.nowShiny = false;
-				changeSet(this, pokemon, ssbSets['Neptune']);
+				changeSet(this, pokemon, ssbSets['Neptune'], true);
 			},
 			onRestart(pokemon) {
 				pokemon.removeVolatile('Golden Order');
 				pokemon.m.nowShiny = false;
-				changeSet(this, pokemon, ssbSets['Neptune']);
+				changeSet(this, pokemon, ssbSets['Neptune'], true);
 			},
 		},
 		secondary: null,
@@ -720,6 +720,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
+				this.add('-activate', target, 'move: Faith Fray the Damned', target);
 				this.boost({def: 1, spe: 1}, target);
 			},
 		},

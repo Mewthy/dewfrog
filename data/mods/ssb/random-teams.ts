@@ -112,13 +112,13 @@ export const ssbSets: SSBSets = {
 		species: 'Pidgeot', ability: 'Silver Pinion', item: 'Storm Talisman', gender: 'M',
 		moves: ['Hurricane', 'Thunder', ['Roost', 'Blizzard', 'Solar Beam', 'Protect']],
 		signatureMove: 'Golden Order',
-		evs: {hp: 200, spa: 56, spe: 252}, nature: 'Timid',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
 	'Golden Neptune': {
 		species: 'Pidgeot', ability: 'Gold Pinion', item: 'Peace Talisman', gender: 'M',
 		moves: ['Sky Attack', 'Solar Blade', 'King\'s Shield'],
 		signatureMove: 'Faith Fray the Damned',
-		evs: {hp: 200, atk: 56, spe: 252}, nature: 'Jolly', shiny: true,
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: true,
 		skip: 'Neptune',
 	},
 	Omega: {

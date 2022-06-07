@@ -75,46 +75,35 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 
 	// Finger
-	chaosring: {
-		name: "Chaos Ring",
-		fling: {
-			basePower: 150,
+	metronomiumz: {
+		name: "Metronomium Z",
+		spritenum: 632,
+		onTakeItem: false,
+		zMove: "Fear the Finger",
+		zMoveFrom: "Mega Metronome",
+		itemUser: ["Reuniclus"],
+		gen: 8,
+		desc: "If held by a Reuniclus with Mega Metronome, it can use Fear the Finger.",
+	},
+
+	// Hell
+	airblimp: {
+		name: "Air Blimp",
+		onImmunity(type, pokemon) {
+			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'futuresight') {
-				let t = this.random(5);
-				switch (t) {
-				case 1:
-					this.add('-start', move, 'typechange', 'Psychic');
-					move.type = "Psychic";
-					break;
-				case 2:
-					this.add('-start', move, 'typechange', 'Dark');
-					move.type = "Dark";
-					break;
-				case 3:
-					this.add('-start', move, 'typechange', 'Ghost');
-					move.type = "Ghost";
-					break;
-				case 4:
-					this.add('-start', move, 'typechange', 'Fairy');
-					move.type = "Fairy";
-					break;
-				case 5:
-					this.add('-start', move, 'typechange', 'Dragon');
-					move.type = "Dragon";
-					break;
-				default:
-					this.add('-start', move, 'typechange', 'Normal');
-					move.type = "Normal";
-					break;
-				}
-				this.add('-message', `Roll: ${t} - Future Sight Type: ${move.type}`);
+		onTryHit(pokemon, source, move) {
+			if (move.flags['powder'] && pokemon !== source && this.dex.getImmunity('powder', pokemon)) {
+				this.add('-activate', pokemon, 'item: Air Blimp', move.name);
+				return null;
+			}
+			if (pokemon !== source && move.type === 'Ground') {
+				this.add('-immune', pokemon, '[from] item: Air Blimp');
+				return null;
 			}
 		},
 		gen: 8,
-		desc: "When Future Sight is used by the holder, the typing is randomized on hit.",
+		desc: "Holder's immune to ground types moves and ignores weather.",
 	},
 
 	// Horrific17
@@ -127,29 +116,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Arcanine"],
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
-	},
-
-	// Finger
-	metronomiumz: {
-		name: "Metronomium Z",
-		spritenum: 632,
-		onTakeItem: false,
-		zMove: "Fear the Finger",
-		zMoveFrom: "Mega Metronome",
-		itemUser: ["Reuniclus"],
-		gen: 8,
-		desc: "If held by a Reuniclus with Mega Metronome, it can use Fear the Finger.",
-	},
-
-	// The Dealer
-	doubleornothing: {
-		name: "Double or Nothing",
-		onTakeItem: false,
-		zMove: "The House Always Wins",
-		zMoveFrom: "Roll the Dice",
-		itemUser: ["Hoopa", "Hoopa-Unbound"],
-		gen: 8,
-		desc: "If held by a Hoopa with Roll the Dice, it can use The House Always Wins.",
 	},
 
 	// Mink the Putrid
@@ -265,5 +231,16 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Holder's single-hit moves of 60 power or less have 20 power and hit 2-5 times instead.",
 		shortDesc: "Moves <= 60 BP become 20 BP, hit 2-5 times.",
+	},
+
+	// The Dealer
+	doubleornothing: {
+		name: "Double or Nothing",
+		onTakeItem: false,
+		zMove: "The House Always Wins",
+		zMoveFrom: "Roll the Dice",
+		itemUser: ["Hoopa", "Hoopa-Unbound"],
+		gen: 8,
+		desc: "If held by a Hoopa with Roll the Dice, it can use The House Always Wins.",
 	},
 };

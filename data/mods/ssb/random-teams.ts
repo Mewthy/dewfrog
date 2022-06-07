@@ -102,11 +102,17 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Mad Toxin',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Mirāju: {
+	Miraju: {
 		species: 'Wynaut', ability: 'Illusion', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Illusive Energy',
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
+	Neptune: {
+		species: 'Pidgeot', ability: 'Silver Pinion', item: 'Storm Talisman', gender: 'M',
+		moves: ['Hurricane', 'Thunder', 'Roost'],
+		signatureMove: 'Golden Order',
+		evs: {hp: 200, spa: 56, spe: 252}, nature: 'Timid',
 	},
 	Omega: {
 		species: 'Aegislash', ability: 'Burn Heal', item: 'Flame Orb', gender: 'N',

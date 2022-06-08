@@ -96,6 +96,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rocket Punch',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
+	Mewth: {
+		species: 'Furret', ability: 'The Saga', item: 'Spirit Emblem', gender: 'F',
+		moves: ['Boomburst', 'Fire Blast', 'Draining Kiss'],
+		signatureMove: 'Oblivion Banisher',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+	},
 	'Mink the Putrid': {
 		species: 'Venusaur', ability: 'Retardant Scales', item: 'Gurgling Blossom', gender: 'F',
 		moves: ['Leaf Storm', 'Earth Power', 'Clear Smog'],
@@ -133,7 +139,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Zombie Fairy",
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
-	'Roughskull': {
+	Roughskull: {
 		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
 		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
 		signatureMove: 'Radiation Stench',

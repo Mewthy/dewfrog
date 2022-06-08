@@ -543,6 +543,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Mewth
+	thesaga: {
+		desc: "Turns Pokemon Normal/Ghost, applies Focus Energy to the Pokemon on switch in as well as summons Nightmare Realm.",
+		shortDesc: "Normal/Ghost; Focus Energy + Nightmare Realm.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "The Saga");
+    		pokemon.types = ["Normal", "Ghost"];
+			this.actions.useMove('Focus Energy', pokemon);
+			this.field.setTerrain('nightmarerealm');
+		},
+		name: "The Saga",
+		gen: 8,
+	},
+	
 	// Mink the Putrid
 	retardantscales: {
 		desc: "This Pokemon takes 0.8x damage from attacks, 0.5x damage from Fire-type attacks, and 1.5x damage from Dragon-type attacks.",

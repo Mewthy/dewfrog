@@ -72,6 +72,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Hades' Erinyes",
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
+	/*Hibachi: {
+		species: 'Volcarona', ability: 'Chain', item: 'Life Orb', gender: 'F',
+		moves: ['Protect', 'Bug Buzz', 'Fusion Flare'],
+		signatureMove: 'Washing Machine',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},*/
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
 		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],
@@ -167,7 +173,7 @@ export const ssbSets: SSBSets = {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
 		signatureMove: 'Karma',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	'Yuuka Kazami': {
 		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',

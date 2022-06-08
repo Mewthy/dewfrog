@@ -564,6 +564,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
+	
+	//Mewth
+	oblivionbanisher: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "Target is heal blocked and 20% chance to be put to sleep.",
+		shortDesc: "Heal Block; 20% Sleep chance.",
+		name: "Oblivion Banisher",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Black Hole Eclipse', target);
+		},
+		volatileStatus: 'healblock',
+		secondary: {
+			chance: 20,
+			status: 'slp',
+		},
+		target: "allAdjacent",
+		type: "Ghost",
+	},			
 
 	// Mink the Putrid
 	madtoxin: {

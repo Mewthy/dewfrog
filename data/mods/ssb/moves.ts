@@ -390,7 +390,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Psychic",
 	},
- 
+
+	// Hibachi
+	washingmachine: {
+		accuracy: true,
+		basePower: 0,
+		category: "Special",
+		desc: "Instantly faints the target, ignoring immunity.",
+		shortDesc: "OHKO's target, ignoring immunity.",
+		name: "Washing Machine",
+		gen: 8,
+		pp: 1,
+		noPPBoosts: true,
+		priority: 4,
+		flags: {bypasssub: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Light That Burns the Sky', target);
+		},
+		ohko: true,
+		ignoreImmunity: true,
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
+
 	// Horrific17
 	meteorcharge: {
 		accuracy: 100,

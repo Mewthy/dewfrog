@@ -402,7 +402,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
-		priority: 4,
+		priority: 5,
 		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');

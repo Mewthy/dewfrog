@@ -347,6 +347,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Hibachi
+	chain: {
+		desc: "This Pokemon boosts its Special Attack by 1 stage at the end of every turn; resets stat stage changes if damaged.",
+		shortDesc: "+1 SpA/turn; resets stats if hit.",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) {
+				this.boost({spa: 1});
+			}
+		},
+		onDamagingHit(damage, target, source, effect) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+		},
+		name: "Chain",
+		gen: 8,
+	},
+
 	// Horrific17
 	fairfight: {
 		desc: "This Pokemon uses Fairy Lock, Haze, and Magic Room on switch-in.",

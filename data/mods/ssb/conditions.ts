@@ -28,9 +28,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		ycoord: 0,
 		onStart() {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|pog?`);
-			this.add('-message', `(${xcoord}, ${ycoord})`);
 			this.add('-message', `(${this.xcoord}, ${this.ycoord})`);
-			this.add('-message', `(${source.xcoord}, ${source.ycoord})`);
 		},
 		onSwitchOut() {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|not pog`);

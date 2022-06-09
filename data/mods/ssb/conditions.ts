@@ -79,10 +79,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', `Source: ${attacker}, Target: ${defender}, Move: ${move}, Base Power: ${basePower}`);
 			if (this.effectState.count > 0 && move.type === "Fire") {
 				this.add('-message', `effectState.count (${this.effectState.count}) is more than one, and move type is Fire. Initiating...`);
-				let dmgMod = 1 + 0.1 * this.effectState.count;
-				this.add('-message', `Damage has been modified by x${dmgMod}. New Damage: ${basePower}`);
+				//let dmgMod = 1 + 0.1 * this.effectState.count;
+				let dmgMod = this.effectState.count;
+				this.add('-message', `Damage has been multiplied by x${dmgMod}.`);
 				return this.chainModify(dmgMod);
 			}
+		},
+		onHit(pokemon, source, move) {
+			this.add('-message', `${move} basepower: ${move.basePower}.`);
 		},
 	},
 };

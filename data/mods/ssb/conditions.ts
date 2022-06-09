@@ -73,8 +73,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-message', `${target} was scarred!`);
 		},
 		onModifyDamage(damage, source, target, move) {
+			this.add('-message', `Source: ${source}, Target: ${target}, Move: ${move}, Base Damage: ${damage}`);
 			if (this.effectState.count > 0 && move.type === "Fire") {
-				return this.chainModify(1 + 0.1 * this.effectState.count);
+				this.add('-message', `effectState.count (${this.effectState.count}) is more than one, and move type is Fire. Initiating...`);
+				let dmgMod = 1 + 0.1 * this.effectState.count;
+				return this.chainModify(dmgMod);
+				this.add('-message', `Damage has been modified by x${dmgMod}. New Damage: ${damage}`);
 			}
 		},
 	},

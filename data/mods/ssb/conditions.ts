@@ -24,6 +24,8 @@ export function getName(name: string): string {
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
 	journeyman: {
 		noCopy: true,
+		xcoord: 0,
+		ycoord: 0,
 		onStart() {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|pog?`);
 		},
@@ -32,6 +34,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint() {
 			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|AAAAAAAAAAAAAAAAAAAAA`);
+		},
+		onHit(target, source, move) {
+			this.add('-message', xcoord);
+			this.add('-message', this.xcoord);
+			this.add('-message', source.xcoord);
 		},
 	},
 	badtox: {

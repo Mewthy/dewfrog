@@ -12,7 +12,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		category: "Physical",
 		desc: "+30 power for each of the user's stat boosts.",
-		shortDesc: "+30 BP for each of user's boosts.",
+		shortDesc: "+30 BP/boost",
 		name: "Rising Surge",
 		gen: 8,
 		pp: 10,
@@ -314,7 +314,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Always results in a critical hit; confuses the target.",
-		shortDesc: "Critical hits and confuses target.",
+		shortDesc: "Critical; confuses target.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -342,7 +342,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Special",
 		desc: "Hits 3 times, with each hit having a 20% chance to lower the target's Special Defense by 1 stage.",
 		shortDesc: "Hits 3 times; 20% chance to lower SpD by 1.",
-		name: "Hade's Erinyes",
+		name: "Hades' Erinyes",
 		gen: 8,
 		pp: 15,
 		priority: 0,
@@ -396,8 +396,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target, ignoring immunity.",
-		shortDesc: "OHKO's target, ignoring immunity.",
+		desc: "Instantly faints the target, ignoring immunity; lowers user's Special Attack by 2 stages.",
+		shortDesc: "OHKO's target, ignoring immunity; -2 SpA.",
 		name: "Washing Machine",
 		gen: 8,
 		pp: 1,
@@ -409,6 +409,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Light That Burns the Sky', target);
+		},
+		self: {
+			boosts: {
+				spa: -2,
+			}
 		},
 		ohko: true,
 		ignoreImmunity: true,
@@ -484,7 +489,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		category: "Special",
 		desc: "This move's type is the same as user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
-		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP per boost.",
+		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP/boost.",
 		name: "Ultima",
 		gen: 8,
 		pp: 40,
@@ -1014,7 +1019,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.baseMoveSlots = newMoveSlots;
 		},
 		volatileStatus: 'flinch',
-		ignoreAbility: true,
+		ignoreImmunity: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'lockon',

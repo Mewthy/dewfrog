@@ -1345,10 +1345,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onHit(target, source, move) {
-			if (source.species.name === "Hoopa") {
+			/*if (source.species.name === "Hoopa") {
 				this.actions.useMove("Roll the Dice", source);
 				this.actions.useMove("Roll the Dice", source);
-			}
+			}*/
+			this.add('-message', 'da move do be hittin');
 			if (source.species.name === "Hoopa-Unbound") {
 				source.hp = 0;
 				source.faint();

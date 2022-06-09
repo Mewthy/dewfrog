@@ -1318,7 +1318,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// The Dealer
 	thehousealwayswins: {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "If Hoopa, uses Roll the Dice twice. If Hoopa-Unbound, becomes Dark-type, Phyiscal, 150 BP, steals stat boosts before dealing damage, and the user faints.",

@@ -354,9 +354,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (pokemon.activeTurns) {
-				this.boost({spa: 1});
-			}
+			this.boost({spa: 1});
 		},
 		onDamagingHit(damage, target, source, effect) {
 			target.clearBoosts();

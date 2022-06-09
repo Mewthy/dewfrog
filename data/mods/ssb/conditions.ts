@@ -75,7 +75,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
-			if (defender.volatiles['hellscar'].count > 0) && move.type === "Fire") {
+			if (defender.volatiles['hellscar'].count > 0 && move.type === "Fire") {
 				let dmgMod = 1 + 0.2 * defender.volatiles['hellscar'].count;
 				return this.chainModify(dmgMod);
 			}

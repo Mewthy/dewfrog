@@ -64,29 +64,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: 'hellscar',
 		onStart(target, source, sourceEffect) {
 			this.effectState.count = 1;
-			this.add('-start', target, 'hellscarred x' + this.effectState.count);
-			this.add('-message', `${target} was scarred!`);
+			this.add('-start', target, 'hellscar' + this.effectState.count);
+			this.add('-message', `${target.name} was scarred!`);
 		},
 		onRestart(target) {
 			if (this.effectState.count >= 5) return false;
 			this.effectState.count++;
 			this.add('-start', target, 'hellscar' + this.effectState.count);
-			this.add('-message', `${target} was scarred!`);
+			this.add('-message', `${target.name} was scarred!`);
 		},
 		onSourceBasePowerPriority: 17,
 		onSourceBasePower(basePower, attacker, defender, move) {
-			if (!defender.volatiles['hellscar'] || defender.volatiles['hellscar'].count < 0) return false;
-			this.add('-message', `Source: ${attacker}, Target: ${defender}, Move: ${move}, Base Power: ${basePower}`);
-			if (this.effectState.count > 0 && move.type === "Fire") {
-				this.add('-message', `effectState.count (${this.effectState.count}) is more than one, and move type is Fire. Initiating...`);
-				//let dmgMod = 1 + 0.1 * this.effectState.count;
-				let dmgMod = this.effectState.count;
-				this.add('-message', `Damage has been multiplied by x${dmgMod}.`);
+			if (defender.volatiles['hellscar'] > 0) && move.type === "Fire") {
+				let dmgMod = 1 + 0.2 * defender.volatiles['hellscar'].count;
 				return this.chainModify(dmgMod);
 			}
-		},
-		onHit(pokemon, source, move) {
-			this.add('-message', `${move} basepower: ${move.basePower}.`);
 		},
 	},
 };

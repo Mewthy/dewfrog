@@ -72,6 +72,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Meteor Charge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	Journeyman: {
+		species: 'Stonjourner', ability: 'Sheer Force', item: 'Life Orb', gender: "M",
+		moves: ['Rock Slide', 'Jump Kick', 'Blaze Kick', 'High Horsepower'],
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	'Kaiser Dragon': {
 		species: 'Rayquaza-Mega', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
 		moves: ['Protect', 'Refresh', 'Recover'],

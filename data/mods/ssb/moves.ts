@@ -416,7 +416,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		ohko: true,
-		ignoreImmunity: true,
+		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
 		type: "???",
@@ -1019,7 +1019,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			source.baseMoveSlots = newMoveSlots;
 		},
 		volatileStatus: 'flinch',
-		ignoreImmunity: true,
+		ignoreAbility: true,
 		secondary: {
 			chance: 100,
 			volatileStatus: 'lockon',

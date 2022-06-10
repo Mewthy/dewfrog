@@ -518,6 +518,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
     		pokemon.types = ['Dark', 'Fighting'];
 		},
 		onModifyMove(move) {
+			move.accuracy = true;
 			move.willCrit = true;
 		},
 		onDamagingHit(damage, target, source, move) {

@@ -349,12 +349,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Hibachi
 	chain: {
-		desc: "This Pokemon boosts its Special Attack by 1 stage at the end of every turn; resets stat stage changes if damaged.",
-		shortDesc: "+1 SpA/turn; resets stats if hit.",
+		desc: "Bug/Fire-type; this Pokemon boosts its Attack and Speed by 1 stage at the end of every turn; resets stat stage changes if damaged.",
+		shortDesc: "Bug/Fire; +1 Atk & Spe per turn; resets stats if hit.",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Chain');
+    		pokemon.types = ['Bug', 'Fire'];
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			this.boost({spa: 1});
+			this.boost({atk: 1, spe: 1});
 		},
 		onDamagingHit(damage, target, source, effect) {
 			target.clearBoosts();

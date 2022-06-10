@@ -90,6 +90,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ultima',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 	},
+	/*Katt: {
+		species: 'Persian-Alola', ability: 'Gladiator', item: 'Salac Berry', gender: 'F',
+		moves: ['Double Iron Bash', 'Power Trip', 'Close Combat'],
+		signatureMove: 'Devil Charge',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: true,
+	},*/
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
 		moves: ['Fusion Bolt', 'Earthquake', 'Dragon Ascent'],

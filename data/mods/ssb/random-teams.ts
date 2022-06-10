@@ -73,10 +73,10 @@ export const ssbSets: SSBSets = {
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
 	/*Hibachi: {
-		species: 'Volcarona', ability: 'Chain', item: 'Life Orb', gender: 'F',
-		moves: ['Protect', 'Bug Buzz', 'Fusion Flare'],
+		species: 'Beedrill', ability: 'Chain', item: 'Life Orb', gender: 'F',
+		moves: ['Protect', 'Attack Order', 'Flare Blitz'],
 		signatureMove: 'Washing Machine',
-		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},*/
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',

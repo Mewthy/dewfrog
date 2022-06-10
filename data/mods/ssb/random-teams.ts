@@ -92,7 +92,7 @@ export const ssbSets: SSBSets = {
 	},
 	/*Katt: {
 		species: 'Persian-Alola', ability: 'Gladiator', item: 'Salac Berry', gender: 'F',
-		moves: ['Double Iron Bash', 'Power Trip', 'Close Combat'],
+		moves: ['Double Iron Bash', 'Reversal', 'Power Trip'],
 		signatureMove: 'Devil Charge',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: true,
 	},*/

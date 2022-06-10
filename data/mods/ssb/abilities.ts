@@ -328,7 +328,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Hell
 	sinnerspunishment: {
-		desc: "This Pokemon becomes Dark/Fire/Ghost-type; inflicts Hell Scar on target.",
+		desc: "Dark/Fire/Ghost-type; inflicts Hell Scar on target.",
 		shortDesc: "Dark/Fire/Ghost; inflicts Hell Scar.",
 		onStart(pokemon) {
 			this.add("-ability", pokemon, "Sinner's Punishment");
@@ -501,6 +501,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isPermanent: true,
 		name: "Elemental Shift",
+		gen: 8,
+	},
+
+	// Katt
+	gladiator: {
+		desc: "Dark/Fighting-type; uses No Retreat on switch-in; always critically hits; uses Counterattack when hit.",
+		shortDesc: "Dark/Fighting; No Retreat on switch-in; always crits; Counterattack when hit.",
+		onStart(pokemon) {
+			this.actions.useMove('No Retreat', pokemon);
+			this.add('-ability', pokemon, 'Gladiator');
+    		pokemon.types = ['Dark', 'Fighting'];
+		},
+		onModifyMove(move) {
+			move.willCrit = true;
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.actions.useMove('Counterattack', target, source);
+		},
+		name: "Gladiator",
 		gen: 8,
 	},
 
@@ -685,6 +704,69 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Roughskull
+	"venomshock": {
+		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
+		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
+		onModifyMove(move) {
+			if (!move || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+			move.secondaries.push({
+				chance: 30,
+				status: 'par',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+		},
+		name: "Venom Shock",
+		gen: 8,
+	},
+
+	// Rin Kaenbyou
+	"catswalk": {
+		desc: "Fire/Ghost-type; heals 3% of max HP every turn and gains 1 random stat boost for every fainted ally.",
+		shortDesc: "Fire/Ghost; +3% HP/turn and gains 1 random boost per fainted ally.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "Cat's Walk");
+    		pokemon.types = ["Fire", "Ghost"];
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					let stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in pokemon.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) boost[randomStat] = 1;
+					this.boost(boost);
+				}
+			}
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			let healInt = 0;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					healInt += pokemon.maxhp / 33.3;
+				}
+			}
+			if (healInt > 0) this.heal(healInt);
+		},
+		name: "Cat's Walk",
+		gen: 8,
+	},
+
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
@@ -707,7 +789,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// SunDraco
 	dexterity: {
-		desc: "This Pokemon becomes Normal/Ghost on switch-in; Speed is boosted by 1.1x; cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
+		desc: "Normal/Ghost-type; Speed is boosted by 1.1x; cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
 		shortDesc: "Normal/Ghost; x1.1 Speed; held item cannot be removed or disabled.",
 		onModifySpePriority: 5,
 		onStart(pokemon) {
@@ -799,69 +881,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.actions.useMove('Ingrain', pokemon);
 		},
 		name: "Flower Master",
-		gen: 8,
-	},
-
-	// Roughskull
-	"venomshock": {
-		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
-		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
-		onModifyMove(move) {
-			if (!move || move.target === 'self') return;
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'tox',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-			move.secondaries.push({
-				chance: 30,
-				status: 'par',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-		},
-		name: "Venom Shock",
-		gen: 8,
-	},
-
-	// Rin Kaenbyou
-	"catswalk": {
-		desc: "This Pokemon becomes Fire/Ghost on switch-in; heals 3% of max HP every turn and gains 1 random stat boost for every fainted ally.",
-		shortDesc: "Fire/Ghost; +3% HP/turn and gains 1 random boost per fainted ally.",
-		onStart(pokemon) {
-			this.add("-ability", pokemon, "Cat's Walk");
-    		pokemon.types = ["Fire", "Ghost"];
-			for (const ally of pokemon.side.pokemon) {
-				if (ally.fainted) {
-					let stats: BoostID[] = [];
-					const boost: SparseBoostsTable = {};
-					let statPlus: BoostID;
-					for (statPlus in pokemon.boosts) {
-						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-						if (pokemon.boosts[statPlus] < 6) {
-							stats.push(statPlus);
-						}
-					}
-					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-					if (randomStat) boost[randomStat] = 1;
-					this.boost(boost);
-				}
-			}
-		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			let healInt = 0;
-			for (const ally of pokemon.side.pokemon) {
-				if (ally.fainted) {
-					healInt += pokemon.maxhp / 33.3;
-				}
-			}
-			if (healInt > 0) this.heal(healInt);
-		},
-		name: "Cat's Walk",
 		gen: 8,
 	},
 };

@@ -393,11 +393,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Hibachi
 	washingmachine: {
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target; lowers user's Attack and Speed by 2 stages.",
-		shortDesc: "OHKO's target; -2 Atk & Spe.",
+		desc: "Instantly faints the target; lowers user's Attack and Speed by 2 stages; fails if target doesn't attack.",
+		shortDesc: "OHKO's target; -2 Atk & Spe; fails if not attacked.",
 		name: "Washing Machine",
 		gen: 8,
 		pp: 1,
@@ -409,6 +409,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Light That Burns the Sky', target);
+		},
+		onTry(source, target) {
+			const action = this.queue.willMove(target);
+			const move = action?.choice === 'move' ? action.move : null;
+			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
+				return false;
+			}
 		},
 		self: {
 			boosts: {

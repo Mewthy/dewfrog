@@ -314,7 +314,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Always results in a critical hit; confuses the target.",
-		shortDesc: "Critical; confuses target.",
+		shortDesc: "Crits; confuses target.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -328,7 +328,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psychic', target);
 			this.add('-anim', source, 'Sky Drop', target);
 		},
-		critRatio: 5,
+		willCrit: true,
 		volatileStatus: 'confusion',
 		secondary: null,
 		target: "Normal",
@@ -513,6 +513,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "???"
+	},
+	
+	// Katt
+	devilcharge: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User survives attacks this turn with at least 1 HP; deals 2x damage next turn.",
+		shortDesc: "Survives attacks; 2x damage next turn.",
+		name: "Devil Charge",
+		gen: 8,
+		pp: 10,
+		priority: 4,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bulk Up', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			this.add('-activate', pokemon, 'move: Devil Charge');
+		},
+		stallingMove: true,
+		volatileStatus: 'devilcharge',
+		condition: {
+			duration: 2,
+			onRestart(pokemon) {
+				this.effectState.duration = 2;
+			},
+			onBasePowerPriority: 9,
+			onBasePower(basePower, attacker, defender, move) {
+				this.debug('devil charge boost');
+				return this.chainModify(2);
+			},
+		},
+		secondary: {
+			volatileStatus: 'endure',
+		},
+		target: "self",
+		type: "Dark",
 	},
 
 	// LandoriumZ

@@ -704,30 +704,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
-	// Roughskull
-	"venomshock": {
-		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
-		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
-		onModifyMove(move) {
-			if (!move || move.target === 'self') return;
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'tox',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-			move.secondaries.push({
-				chance: 30,
-				status: 'par',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-		},
-		name: "Venom Shock",
-		gen: 8,
-	},
-
 	// Rin Kaenbyou
 	"catswalk": {
 		desc: "Fire/Ghost-type; heals 3% of max HP every turn and gains 1 random stat boost for every fainted ally.",
@@ -764,6 +740,30 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (healInt > 0) this.heal(healInt);
 		},
 		name: "Cat's Walk",
+		gen: 8,
+	},
+
+	// Roughskull
+	"venomshock": {
+		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
+		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
+		onModifyMove(move) {
+			if (!move || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+			move.secondaries.push({
+				chance: 30,
+				status: 'par',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+		},
+		name: "Venom Shock",
 		gen: 8,
 	},
 

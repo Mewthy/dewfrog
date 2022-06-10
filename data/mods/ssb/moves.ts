@@ -334,6 +334,33 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "Normal",
 		type: "Psychic",
 	},
+	
+	// Genwunner
+	psychicbind: {
+		accuracy: 75,
+		basePower: 40,
+		category: "Special",
+		desc: "Traps the target for 4-5 turns; flinches target.",
+		shortDesc: "Partially traps and flinches target.",
+		name: "Psychic Bind",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Psychic', target);
+		},
+		volatileStatus: 'partiallytrapped',
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Psychic",
+	},
 
 	// Hell
 	hadeserinyes: {
@@ -364,46 +391,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
-	// Genwunner
-	psychicbind: {
-		accuracy: 75,
-		basePower: 40,
-		category: "Special",
-		desc: "Traps the target for 4-5 turns; flinches target.",
-		shortDesc: "Partially traps and flinches target.",
-		name: "Psychic Bind",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {mirror: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Psychic', target);
-		},
-		volatileStatus: 'partiallytrapped',
-		secondary: {
-			chance: 100,
-			volatileStatus: 'flinch',
-		},
-		target: "normal",
-		type: "Psychic",
-	},
-
 	// Hibachi
 	washingmachine: {
 		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target, ignoring immunity; lowers user's Special Attack by 2 stages.",
-		shortDesc: "OHKO's target, ignoring immunity; -2 SpA.",
+		desc: "Instantly faints the target; lowers user's Attack and Speed by 2 stages.",
+		shortDesc: "OHKO's target; -2 Atk & Spe.",
 		name: "Washing Machine",
 		gen: 8,
 		pp: 1,
 		noPPBoosts: true,
-		priority: 5,
-		flags: {bypasssub: 1},
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -412,14 +412,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		self: {
 			boosts: {
-				spa: -2,
-			}
+				atk: -2,
+				spe: -2,
+			},
 		},
 		ohko: true,
-		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
-		type: "???",
+		type: "Bug",
 	},
 
 	// Horrific17
@@ -558,6 +558,46 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		target: "self",
 		type: "Dark",
+	},
+
+	// Katt
+	counterattack: {
+		accuracy: true,
+		basePower: 0,
+		damageCallback(pokemon) {
+			const lastDamagedBy = pokemon.getLastDamagedBy(true);
+			if (lastDamagedBy !== undefined) {
+				return (lastDamagedBy.damage) || 1;
+			}
+			return 0;
+		},
+		category: "Physical",
+		desc: "This move returns damage received.",
+		shortDesc: "Returns damage.",
+		name: "Counterattack",
+		gen: 8,
+		pp: 5,
+		priority: -5,
+		flags: {contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'High Jump Kick', target);
+		},
+		onTry(source) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
+		},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
+			}
+		},
+		secondary: null,
+		target: "scripted",
+		type: "???",
 	},
 
 	// LandoriumZ

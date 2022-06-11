@@ -393,17 +393,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Hibachi
 	washingmachine: {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target; lowers user's Attack and Speed by 2 stages; fails if target doesn't attack.",
-		shortDesc: "OHKO's target; -2 Atk & Spe; fails if not attacked.",
+		desc: "Instantly faints the target, ignoring immunity; fails if target attacks.",
+		shortDesc: "OHKO's target, ignoring immunity; fails if attacked.",
 		name: "Washing Machine",
 		gen: 8,
-		pp: 1,
-		noPPBoosts: true,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		pp: 5,
+		priority: 5,
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -413,17 +412,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
-			if (!move || (move.category === 'Status' && move.id !== 'mefirst') || target.volatiles['mustrecharge']) {
+			if (move.category !== 'Status') {
 				return false;
 			}
 		},
-		self: {
-			boosts: {
-				atk: -2,
-				spe: -2,
-			},
-		},
 		ohko: true,
+		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
 		type: "Bug",
@@ -521,7 +515,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "???"
 	},
-	
+
 	// Katt
 	devilcharge: {
 		accuracy: true,
@@ -544,6 +538,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit(pokemon) {
+			pokemon.addVolatile('endure');
 			pokemon.addVolatile('stall');
 			this.add('-activate', pokemon, 'move: Devil Charge');
 		},
@@ -560,9 +555,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return this.chainModify(2);
 			},
 		},
-		secondary: {
-			volatileStatus: 'endure',
-		},
+		secondary: null,
 		target: "self",
 		type: "Dark",
 	},
@@ -579,11 +572,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return 0;
 		},
 		category: "Physical",
-		desc: "This move returns damage received.",
+		desc: "Returns damage received if attacked.",
 		shortDesc: "Returns damage.",
 		name: "Counterattack",
 		gen: 8,
-		pp: 5,
+		pp: 20,
 		priority: -5,
 		flags: {contact: 1},
 		onTryMove() {

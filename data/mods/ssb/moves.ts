@@ -397,7 +397,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Special",
 		desc: "Instantly faints the target, ignoring immunity; fails if target attacks.",
-		shortDesc: "OHKO's target, ignoring immunity; fails if attacked.",
+		shortDesc: "OHKO's target, ignoring immunity; fails if target attacks.",
 		name: "Washing Machine",
 		gen: 8,
 		pp: 5,
@@ -412,7 +412,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onTry(source, target) {
 			const action = this.queue.willMove(target);
 			const move = action?.choice === 'move' ? action.move : null;
-			if (move.category !== 'Status') {
+			if (move && move.category !== 'Status') {
 				return false;
 			}
 		},
@@ -420,7 +420,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
-		type: "Bug",
+		type: "???",
 	},
 
 	// Horrific17

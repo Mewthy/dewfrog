@@ -510,16 +510,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Katt
 	gladiator: {
-		desc: "Dark/Fighting-type; uses No Retreat on switch-in; always critically hits; uses Counterattack when hit.",
-		shortDesc: "Dark/Fighting; No Retreat on switch-in; always crits; Counterattack when hit.",
+		desc: "Dark/Fighting-type; uses No Retreat on switch-in; uses Counterattack when hit.",
+		shortDesc: "Dark/Fighting; No Retreat on switch-in; Counterattack when hit.",
 		onStart(pokemon) {
 			this.actions.useMove('No Retreat', pokemon);
 			this.add('-ability', pokemon, 'Gladiator');
     		pokemon.types = ['Dark', 'Fighting'];
-		},
-		onModifyMove(move) {
-			move.accuracy = true;
-			move.willCrit = true;
 		},
 		onDamagingHit(damage, target, source, move) {
 			this.actions.useMove('Counterattack', target, source);

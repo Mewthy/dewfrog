@@ -521,8 +521,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "User survives attacks this turn with at least 1 HP; deals 2x damage next turn.",
-		shortDesc: "Survives attacks; 2x damage next turn.",
+		desc: "User survives attacks this turn with at least 1 HP; boosts Attack and Speed by 1 stage.",
+		shortDesc: "Survives attacks; +1 Atk/Spe.",
 		name: "Devil Charge",
 		gen: 8,
 		pp: 10,
@@ -538,22 +538,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
 		},
 		onHit(pokemon) {
-			pokemon.addVolatile('endure');
 			pokemon.addVolatile('stall');
-			this.add('-activate', pokemon, 'move: Devil Charge');
 		},
 		stallingMove: true,
-		volatileStatus: 'devilcharge',
-		condition: {
-			duration: 2,
-			onRestart(pokemon) {
-				this.effectState.duration = 2;
-			},
-			onBasePowerPriority: 9,
-			onBasePower(basePower, attacker, defender, move) {
-				this.debug('devil charge boost');
-				return this.chainModify(2);
-			},
+		volatileStatus: 'endure',
+		boosts: {
+			atk: 1,
+			spe: 1,
 		},
 		secondary: null,
 		target: "self",

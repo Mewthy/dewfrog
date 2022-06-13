@@ -29,6 +29,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Bleu
+	bluemagic: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Sunny Day if the user is Fire-type; Electric Terrain if Electric; Hail and Aurora Veil if Ice; otherwise, fully heals HP and status condition but lowers Defense and Special Defense by 1 stage; this move's type is the same as the user's.",
+		shortDesc: "Effect depends on user's type; same type as user's.",
+		name: "Blue Magic",
+		gen: 8,
+		pp: 5,
+		priority: 4,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Protect', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			if (pokemon.types[0] === 'Electric') {
+				this.actions.useMove('Electric Terrain', pokemon);
+			} else if (pokemon.types[0] === 'Fire') {
+				this.actions.useMove('Sunny Day', pokemon);
+			} else if (pokemon.types[0] === 'Ice') {
+				this.actions.useMove('Hail', pokemon);
+				this.actions.useMove('Aurora Veil', pokemon);
+			} else {
+				this.heal(pokemon.maxhp);
+				pokemon.cureStatus();
+				this.boost({def: -1, spd: -1}, pokemon);
+			}
+		},
+		onModifyType(move, pokemon, target) {
+			move.type = pokemon.types[0];
+		},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		secondary: null,
+		target: "self",
+		type: "???",
+	},
+
 	// Brookeee
 	masochism: {
 		accuracy: true,
@@ -489,7 +535,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower + 5 * pokemon.positiveBoosts();
 		},
 		category: "Special",
-		desc: "This move's type is the same as user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
+		desc: "This move's type is the same as the user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
 		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP/boost.",
 		name: "Ultima",
 		gen: 8,

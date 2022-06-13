@@ -158,6 +158,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power Unleashed",
 		gen: 8,
 	},
+	
+	// Bleu
+	wizardry: {
+		desc: "This Pokemon moves first in its priority bracket; becomes the same type as the move's that it uses.",
+		shortDesc: "Moves first in priority bracket; same type as move's.",
+		onFractionalPriority: 0.1,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Wizardry');
+			}
+		},
+		name: "Wizardry",
+		gen: 8,
+	},
 
 	// Brookeee
 	aggression: {

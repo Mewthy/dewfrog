@@ -28,7 +28,7 @@ export const ssbSets: SSBSets = {
 		species: 'Milotic', ability: 'Wizardry', item: 'White Herb', gender: 'F',
 		moves: ['Flamethrower', 'Thunderbolt', 'Ice Beam'],
 		signatureMove: 'Blue Magic',
-		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Quiet',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
 	Brookeee: {
 		species: 'Primeape', ability: 'Aggression', item: 'Ramen', gender: 'F',

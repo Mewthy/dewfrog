@@ -158,7 +158,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Power Unleashed",
 		gen: 8,
 	},
-	
+
 	// Bleu
 	wizardry: {
 		desc: "This Pokemon moves first in its priority bracket; becomes the same type as the move's that it uses.",

@@ -24,6 +24,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rising Surge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	Bleu: {
+		species: 'Milotic', ability: 'Wizardry', item: 'White Herb', gender: 'F',
+		moves: ['Flamethrower', 'Thunderbolt', 'Ice Beam'],
+		signatureMove: 'Blue Magic',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Quiet',
+	},
 	Brookeee: {
 		species: 'Primeape', ability: 'Aggression', item: 'Ramen', gender: 'F',
 		moves: ['Ice Punch', 'Stomping Tantrum', 'Endure'],
@@ -72,12 +78,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Hades' Erinyes",
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
-	/*Hibachi: {
+	Hibachi: {
 		species: 'Beedrill', ability: 'Chain', item: 'Life Orb', gender: 'F',
 		moves: ['Protect', 'Attack Order', 'Flare Blitz'],
 		signatureMove: 'Washing Machine',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
-	},*/
+	},
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
 		moves: ['Morning Sun', 'Solar Blade', 'Extreme Speed'],
@@ -90,12 +96,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Ultima',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
 	},
-	/*Katt: {
+	Katt: {
 		species: 'Persian-Alola', ability: 'Gladiator', item: 'Lum Berry', gender: 'F',
 		moves: ['Double Iron Bash', 'Reversal', 'Power Trip'],
 		signatureMove: 'Devil Charge',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: true,
-	},*/
+	},
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
 		moves: ['Fusion Bolt', 'Earthquake', 'Dragon Ascent'],

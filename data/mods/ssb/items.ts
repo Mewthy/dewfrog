@@ -117,6 +117,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
 	},
+	
+	//Mewth
+	spiritemblem: {
+		name: "Spirit Emblem",
+		spritenum: 180,
+		fling: {
+			basePower: 30,
+		},
+		if (move.type === 'Ghost') {
+			return critRatio + 2;
+		},
+		gen: 8,
+		desc: "The holder has their Ghost types moves have a higher chance to land a critical hit.",
+		shortDesc: "Crit Ratio of Ghost Moves + 2.",
+	},
 
 	// Mink the Putrid
 	gurglingblossom: {

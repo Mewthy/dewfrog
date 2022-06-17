@@ -564,7 +564,107 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-
+	
+	//Mewth
+	oblivionbanisher: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "Target is heal blocked and 20% chance to be put to sleep.",
+		shortDesc: "Heal Block; 20% Sleep chance.",
+		name: "Oblivion Banisher",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Black Hole Eclipse', target);
+		},
+		volatileStatus: 'healblock',
+		secondary: {
+			chance: 20,
+			status: 'slp',
+		},
+		target: "allAdjacent",
+		type: "Ghost",
+	},
+	
+	nightmarerealm: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, Non Ghost types take 1/16th damage; Fairy moves get boosted by 1.5x; Sleeping Pokemon get inflicted with Nightmare.",
+		shortDesc: "1/16th damage to Non Ghost; Fairy moves 1.3x boost; Nightmare on sleeping targets.",
+		name: "Nightmare Realm",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'nightmarerealm',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Nightmare Realm');
+					}
+					return true;
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'nightmare') {
+					this.add('-activate', target, 'move: Nightmare Realm');
+					return true;
+				}
+			},
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Fairy' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('nighatmre realm boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Nightmare Realm');
+				}
+				this.add('-message', 'The battlefield became dark! Sweet dreams!');
+				}
+			},
+			onResidualOrder: 5,
+			onResidual(pokemon) {
+				if (pokemon.isSemiInvulnerable()) return;
+				if (!pokemon || pokemon.hasType('Ghost')) return;
+				if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
+					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
+				}
+			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Nightmare Realm');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Ghost",
+	},
+	
 	// Mink the Putrid
 	madtoxin: {
 		accuracy: 85,

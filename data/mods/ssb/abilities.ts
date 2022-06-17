@@ -626,6 +626,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Mewth
+	thesaga: {
+		desc: "Turns Pokemon Normal/Ghost, applies Focus Energy to the Pokemon on switch in as well as summons Nightmare Realm.",
+		shortDesc: "Normal/Ghost; Focus Energy + Nightmare Realm.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "The Saga");
+    		pokemon.types = ["Normal", "Ghost"];
+			this.actions.useMove('Focus Energy', pokemon);
+			this.field.setTerrain('nightmarerealm');
+		},
+		name: "The Saga",
+		gen: 8,
+	},
+	
 	// Mink the Putrid
 	retardantscales: {
 		desc: "This Pokemon takes 0.8x damage from attacks, 0.5x damage from Fire-type attacks, and 1.5x damage from Dragon-type attacks.",
@@ -899,6 +913,87 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.actions.useMove('Ingrain', pokemon);
 		},
 		name: "Flower Master",
+		gen: 8,
+	},
+
+	// Roughskull
+	"venomshock": {
+		desc: "Every move the user uses has a 30% chance to badly poison or paralyze the target.",
+		shortDesc: "Every move has a 30% chance to toxicate or paralyze target.",
+		onModifyMove(move) {
+			if (!move || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+			move.secondaries.push({
+				chance: 30,
+				status: 'par',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+		},
+		name: "Venom Shock",
+		gen: 8,
+	},
+	
+	// Ruffbot
+	"rngscript": {
+		desc: "This Pokemon move's that have secondary effects are guaranteed to activate.",
+		shortDesc: "Guarantees second effects to activate.",
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = true;
+				}
+			}
+			if (move.self?.chance) move.self.chance = true;
+		},
+		name: "RNG Script",
+		gen: 8,
+	},
+
+	// Rin Kaenbyou
+	"catswalk": {
+		desc: "New typing is Fire/Ghost. This pokemon gains 1 random stat boost for every dead ally on switch-in. Heal +3% HP per turn for every dead ally.",
+		shortDesc: "Fire/Ghost; Gains buffs for each fainted ally.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "Cat's Walk");
+    		pokemon.types = ["Fire", "Ghost"];
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					let stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in pokemon.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) boost[randomStat] = 1;
+					this.boost(boost);
+				}
+			}
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			let healInt = 0;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					healInt += pokemon.maxhp / 33.3;
+				}
+			}
+			if (healInt > 0) this.heal(healInt);
+		},
+		name: "Cat's Walk",
 		gen: 8,
 	},
 };

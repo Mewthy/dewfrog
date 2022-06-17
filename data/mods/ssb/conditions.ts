@@ -1,4 +1,42 @@
+import {FS} from '../../../lib';
+import {toID} from '../../../sim/dex-data';
+
+// Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
+// This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
+const usergroups: {[userid: string]: string} = {};
+const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
+for (const row of usergroupData) {
+	if (!toID(row)) continue;
+
+	const cells = row.split(',');
+	if (cells.length > 3) throw new Error(`Invalid entry when parsing usergroups.csv`);
+	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
+}
+
+export function getName(name: string): string {
+	const userid = toID(name);
+	if (!userid) throw new Error('No/Invalid name passed to getSymbol');
+
+	const group = usergroups[userid] || ' ';
+	return group + name;
+}
+
 export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
+	journeyman: {
+		noCopy: true,
+		xcoord: 0,
+		ycoord: 0,
+		onStart() {
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|pog?`);
+			this.add('-message', `(${this.effectState.xcoord}, ${this.effectState.ycoord})`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|not pog`);
+		},
+		onFaint() {
+			this.add(`c:|${Math.floor(Date.now() / 1000)}|${getName('Journeyman')}|AAAAAAAAAAAAAAAAAAAAA`);
+		},
+	},
 	badtox: {
 		name: 'badtox',
 		effectType: 'Status',
@@ -22,21 +60,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 	hellscar: {
+		noCopy: true,
 		name: 'hellscar',
 		onStart(target, source, sourceEffect) {
 			this.effectState.count = 1;
 			this.add('-start', target, 'hellscar' + this.effectState.count);
-			this.add('-message', `${target} was scarred!`);
+			this.add('-message', `${target.name} was scarred!`);
 		},
 		onRestart(target) {
 			if (this.effectState.count >= 5) return false;
 			this.effectState.count++;
 			this.add('-start', target, 'hellscar' + this.effectState.count);
-			this.add('-message', `${target} was scarred!`);
+			this.add('-message', `${target.name} was scarred!`);
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (this.effectState.count > 0 && move.type === "Fire") {
-				return this.chainModify(1 + 0.1 * this.effectState.count);
+		onSourceBasePowerPriority: 17,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			if (defender.volatiles['hellscar'].count > 0 && move.type === "Fire") {
+				let dmgMod = 1 + 0.2 * defender.volatiles['hellscar'].count;
+				return this.chainModify(dmgMod);
 			}
 		},
 	},

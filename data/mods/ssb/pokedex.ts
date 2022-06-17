@@ -38,6 +38,16 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	pidgeot: {
 		inherit: true,
 		baseStats: {hp: 83, atk: 101, def: 75, spa: 101, spd: 70, spe: 101},
+  },
+	// Pablo
+	smeargle: {
+		inherit: true,
+		baseStats: {hp: 55, atk: 80, def: 60, spa: 70, spd: 60, spe: 100},
+	},
+	// Ruffbot
+	pokestarf00: {
+		inherit: true,
+		baseStats: {hp: 150, atk: 50, def: 100, spa: 100, spd: 100, spe: 100},
 	},
 	// SunDraco
 	silvally: {

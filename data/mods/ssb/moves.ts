@@ -409,13 +409,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Hell
-	hadeserinyes: {
+	plutoserinyes: {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
-		desc: "Hits 3 times, with each hit having a 20% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "Hits 3 times; 20% chance to lower SpD by 1.",
-		name: "Hades' Erinyes",
+		desc: "Hits 3 times. Each hit has a 20% chance to lower the target's Special Defense by 1 stage.",
+		shortDesc: "Hits 3 times. 20% chance of SpDef drop per hit.",
+		name: "Pluto's Erinyes",
 		gen: 8,
 		pp: 15,
 		priority: 0,
@@ -747,10 +747,110 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-
+	
+	//Mewth
+	oblivionbanisher: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		desc: "Target is heal blocked and 20% chance to be put to sleep.",
+		shortDesc: "Heal Block; 20% Sleep chance.",
+		name: "Oblivion Banisher",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Black Hole Eclipse', target);
+		},
+		volatileStatus: 'healblock',
+		secondary: {
+			chance: 20,
+			status: 'slp',
+		},
+		target: "allAdjacent",
+		type: "Ghost",
+	},
+	
+	nightmarerealm: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, Non Ghost types take 1/16th damage; Fairy moves get boosted by 1.5x; Sleeping Pokemon get inflicted with Nightmare.",
+		shortDesc: "1/16th damage to Non Ghost; Fairy moves 1.3x boost; Nightmare on sleeping targets.",
+		name: "Nightmare Realm",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'nightmarerealm',
+		condition: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.effectType === 'Move' && !effect.secondaries) {
+						this.add('-activate', target, 'move: Nightmare Realm');
+					}
+					return true;
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'nightmare') {
+					this.add('-activate', target, 'move: Nightmare Realm');
+					return true;
+				}
+			},
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Fairy' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('nighatmre realm boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Nightmare Realm');
+				}
+				this.add('-message', 'The battlefield became dark! Sweet dreams!');
+				}
+			},
+			onResidualOrder: 5,
+			onResidual(pokemon) {
+				if (pokemon.isSemiInvulnerable()) return;
+				if (!pokemon || pokemon.hasType('Ghost')) return;
+				if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
+					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
+				}
+			},
+			onFieldResidualOrder: 21,
+			onFieldResidualSubOrder: 3,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Nightmare Realm');
+			},
+		},
+		secondary: null,
+		target: "all",
+		type: "Ghost",
+	},
+	
 	// Mink the Putrid
 	madtoxin: {
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "Very badly poisons the target; ignores typing and protection.",
@@ -1095,6 +1195,57 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+	
+	// Ruffbot
+	advancedai: {
+		accuracy: 100,
+		basePower: 120,
+		categoy: "Special",
+		desc: "This move hits one turn after being used. Changes the type of the user to typeless. Heals 1/4 of the users health. Deals inverse effectiveness to the target.",
+		shortDesc: "Hits one turn after use; Becomes typeless; Heals 1/4; Inverse effectiveness.",
+		name: "Advanced A.I",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {bypasssub: 1, heal: 1},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'advancedai',
+				source: source,
+				moveData: {
+					id: 'advancedai',
+					name: "Advanced A.I",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {bypasssub: 1, heal: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Normal',
+				},
+			});
+			this.add('-start', source, 'move: Advanced A.I');
+			return this.NOT_FAIL;
+		},
+		onHit(pokemon, source, move) {
+			this.heal(pokemon.maxhp / 4, source, source, move);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel', 'Rock', 'Ghost') return 1;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Doom Desire', source);
+			this.add('-anim', source, 'Boomburst', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 
 	// Satori
 	terrifyinghypnotism: {
@@ -1501,7 +1652,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// The Dealer
 	thehousealwayswins: {
-		accuracy: 100,
+		accuracy: true,
 		basePower: 0,
 		category: "Status",
 		desc: "If Hoopa, uses Roll the Dice twice; otherwise, becomes Dark-type, Physical, 150 BP, steals stat boosts before dealing damage, and faints the user.",
@@ -1528,10 +1679,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 		},
 		onHit(target, source, move) {
-			if (source.species.name === "Hoopa") {
+			/*if (source.species.name === "Hoopa") {
 				this.actions.useMove("Roll the Dice", source);
 				this.actions.useMove("Roll the Dice", source);
-			}
+			}*/
+			this.add('-message', 'da move do be hittin');
 			if (source.species.name === "Hoopa-Unbound") {
 				source.hp = 0;
 				source.faint();

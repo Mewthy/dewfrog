@@ -90,6 +90,11 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Meteor Charge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	Journeyman: {
+		species: 'Stonjourner', ability: 'Sheer Force', item: 'Life Orb', gender: "M",
+		moves: ['Rock Slide', 'Jump Kick', 'Blaze Kick', 'High Horsepower'],
+		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+	},
 	'Kaiser Dragon': {
 		species: 'Rayquaza-Mega', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
 		moves: ['Protect', 'Refresh', 'Recover'],
@@ -119,6 +124,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Glacial Lance', 'Thousand Arrows', 'Fusion Bolt'],
 		signatureMove: 'Rocket Punch',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+	},
+	Mewth: {
+		species: 'Furret', ability: 'The Saga', item: 'Spirit Emblem', gender: 'F',
+		moves: ['Boomburst', 'Fire Blast', 'Draining Kiss'],
+		signatureMove: 'Oblivion Banisher',
+		evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 	},
 	'Mink the Putrid': {
 		species: 'Venusaur', ability: 'Retardant Scales', item: 'Gurgling Blossom', gender: 'F',
@@ -157,11 +168,17 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Zombie Fairy",
 		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: "Timid",
 	},
-	'Roughskull': {
+	Roughskull: {
 		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
 		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
 		signatureMove: 'Radiation Stench',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+		evs: {hp: 252, atk: 200, spa: 56}, nature: 'Quiet',
+	},
+	'Ruffbot': {
+		species: 'Pokestar F-00', ability: 'RNG Script', item: 'Nuts and Bolts', gender: 'M',
+		moves: ['Thunderbolt', 'Flamethrower', 'Flash Cannon'],
+		signatureMove: 'Advanced A.I',
+		evs: {hp: 4, def: 252, spe: 252}, nature: 'Timid',
 	},
 	Satori: {
 		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',

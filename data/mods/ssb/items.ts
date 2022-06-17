@@ -93,6 +93,23 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Holder cannot be struck by a critical hit.",
 	},
+	
+	// Ruffbots
+	nutsandbolts: {
+		name: "Nuts and Bolts",
+		onModifySpAPriority: 1,
+        onModifySpA(spa, pokemon) {
+            if (pokemon.species.name !== "Pokestar F-00") return false;
+            return this.chainModify(1.5);
+        },
+onModifySpDPriority: 1,
+        onModifySpD(spd, pokemon) {
+            if (pokemon.species.name !== "Pokestar F-00") return false;
+            return this.chainModify(1.5);
+        },
+		gen: 8,
+		desc: "If held by Pokestar F-00, it's Sp. Atk and Sp. Def are 1.5x.",
+	},
 
 	// Finger
 	metronomiumz: {
@@ -136,6 +153,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		itemUser: ["Arcanine"],
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
+	},
+	
+	//Mewth
+	spiritemblem: {
+		name: "Spirit Emblem",
+		spritenum: 180,
+		fling: {
+			basePower: 30,
+		},
+		if (move.type === 'Ghost') {
+			return critRatio + 2;
+		},
+		gen: 8,
+		desc: "The holder has their Ghost types moves have a higher chance to land a critical hit.",
+		shortDesc: "Crit Ratio of Ghost Moves + 2.",
 	},
 
 	// Mink the Putrid

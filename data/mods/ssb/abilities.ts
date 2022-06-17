@@ -113,10 +113,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (damage >= target.hp && effect && effect.effectType === 'Move' && !this.effectState.slowburn) {
 				this.effectState.slowburn = true;
 				this.add('-ability', target, 'Slow Burn');
-				return target.hp - 1;
-			}
-			if (this.effectState.slowburn == true) {
-				this.heal(target.maxhp / 2);
+				return target.hp - (target.maxhp / 2);
 			}
 		},
 		isBreakable: true,
@@ -162,6 +159,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Bleu
+	wizardry: {
+		desc: "This Pokemon moves first in its priority bracket; becomes the same type as the move's that it uses.",
+		shortDesc: "Moves first in priority bracket; same type as move's.",
+		onFractionalPriority: 0.1,
+		onPrepareHit(source, target, move) {
+			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.add('-start', source, 'typechange', type, '[from] ability: Wizardry');
+			}
+		},
+		name: "Wizardry",
+		gen: 8,
+	},
+
 	// Brookeee
 	aggression: {
 		desc: "This Pokemon's attack is raised by 1 stage after it is damaged by a move; half damage received at full HP.",
@@ -177,6 +191,38 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		isBreakable: true,
 		name: "Aggression",
+		gen: 8,
+	},
+
+	// ☆Chandie
+	grasptheflame: {
+		desc: "Burns attacker on contact; deals 2x damage to burned foes; becomes shiny, heals 1/4 of max HP and deals 1.5x damage if hit by a Fire-type attack.",
+		shortDesc: "Burns on contact; 2x damage to burned; becomes shiny, +1/4 HP and deals 1.5x damage if hit by Fire.",
+		onModifySpa(spa, target) {
+			if (this.effectState.grasptheflame = true) {
+				return this.chainModify(1.5);
+			}
+			if (target && ['brn'].includes(target.status)) {
+				return this.chainModify(2);
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					target.m.nowShiny = true;
+					this.effectState.grasptheflame = true;
+					this.add('-immune', target, '[from] ability: Grasp the Flame');
+				}
+				return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		isBreakable: true,
+		name: "Grasp the Flame",
 		gen: 8,
 	},
 
@@ -299,8 +345,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Hell
 	sinnerspunishment: {
-		desc: "New typing is Dark/Fire/Ghost. The user's attacks inflict a Hell Scar on the target.",
-		shortDesc: "Dark/Fire/Ghost; Attacks inflict Hell Scars.",
+		desc: "Dark/Fire/Ghost-type; inflicts Hell Scar on target.",
+		shortDesc: "Dark/Fire/Ghost; inflicts Hell Scar.",
 		onStart(pokemon) {
 			this.add("-ability", pokemon, "Sinner's Punishment");
     		pokemon.types = ["Dark", "Fire", "Ghost"];
@@ -315,6 +361,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			});
 		},
 		name: "Sinner's Punishment",
+		gen: 8,
+	},
+
+	// Hibachi
+	chain: {
+		desc: "Bug/Fire-type; this Pokemon boosts its Attack and Speed by 1 stage at the end of every turn; resets stat stage changes if damaged.",
+		shortDesc: "Bug/Fire; +1 Atk & Spe per turn; resets stats if hit.",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Chain');
+    		pokemon.types = ['Bug', 'Fire'];
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			this.boost({atk: 1, spe: 1});
+		},
+		onDamagingHit(damage, target, source, effect) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+		},
+		name: "Chain",
 		gen: 8,
 	},
 
@@ -458,9 +525,25 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Katt
+	gladiator: {
+		desc: "Dark/Fighting-type; uses No Retreat on switch-in; uses Counterattack when hit.",
+		shortDesc: "Dark/Fighting; No Retreat on switch-in; Counterattack when hit.",
+		onStart(pokemon) {
+			this.actions.useMove('No Retreat', pokemon);
+			this.add('-ability', pokemon, 'Gladiator');
+    		pokemon.types = ['Dark', 'Fighting'];
+		},
+		onDamagingHit(damage, target, source, move) {
+			this.actions.useMove('Counterattack', target, source);
+		},
+		name: "Gladiator",
+		gen: 8,
+	},
+
 	// LandoriumZ
 	retaliation: {
-		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is doubled if confused, 1.25x otherwise; damage is doubled if not damaged.",
+		desc: "This Pokemon moves last among Pokemon using the same or greater priority moves; evasiveness is 2x if confused, 1.25x otherwise; damage is 2x if not damaged.",
 		shortDesc: "Moves last; 2x evasiveness if confused, 1.25x otherwise; 2x damage if not hit.",
 		onFractionalPriority: -0.1,
 		onModifyAccuracyPriority: -1,
@@ -532,7 +615,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (status.id === 'flinch') return null;
 		},
 		onTryHit(pokemon, target, move) {
-			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.hasBounced || move.flags['reflectable']) {
+			if (move.flags['bullet'] || move.flags['powder'] || move.flags['sound'] || move.flags['reflectable']) {
 				this.add('-immune', pokemon, '[from] ability: Adamantium');
 				return null;
 			}
@@ -577,8 +660,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Neptune
 	silverpinion: {
-		desc: "The holder takes 3/4 damage from attacks and summons strong winds on switch-in.",
-		shortDesc: "Takes 3/4 damage; Summons strong winds.",
+		desc: "Receives 3/4 damage from attacks; summons strong winds on switch-in.",
+		shortDesc: "Takes 3/4 damage; summons strong winds.",
 		onSourceModifyDamage(damage, source, target, move) {
 			return this.chainModify(0.75);
 		},
@@ -607,8 +690,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// Neptune
 	goldpinion: {
-		desc: "The holder's charge attacks skip their charge turn and become 1-turn attacks. Summons strong winds.",
-		shortDesc: "Holder's charge attacks become 1-turn.",
+		desc: "Charge attacks skip their charge turn and become 1-turn attacks; summons strong winds on switch-in.",
+		shortDesc: "Charge attacks become 1-turn; summons strong winds.",
 		onModifyMove(move, pokemon, target) {
 			if (move.flags['charge']) {
 				this.add('-activate', pokemon, 'ability: Gold Pinion');
@@ -653,6 +736,69 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Rin Kaenbyou
+	"catswalk": {
+		desc: "Fire/Ghost-type; heals 3% of max HP every turn and gains 1 random stat boost for every fainted ally.",
+		shortDesc: "Fire/Ghost; +3% HP/turn and gains 1 random boost per fainted ally.",
+		onStart(pokemon) {
+			this.add("-ability", pokemon, "Cat's Walk");
+    		pokemon.types = ["Fire", "Ghost"];
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					let stats: BoostID[] = [];
+					const boost: SparseBoostsTable = {};
+					let statPlus: BoostID;
+					for (statPlus in pokemon.boosts) {
+						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+						if (pokemon.boosts[statPlus] < 6) {
+							stats.push(statPlus);
+						}
+					}
+					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+					if (randomStat) boost[randomStat] = 1;
+					this.boost(boost);
+				}
+			}
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			let healInt = 0;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted) {
+					healInt += pokemon.maxhp / 33.3;
+				}
+			}
+			if (healInt > 0) this.heal(healInt);
+		},
+		name: "Cat's Walk",
+		gen: 8,
+	},
+
+	// Roughskull
+	"venomshock": {
+		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
+		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
+		onModifyMove(move) {
+			if (!move || move.target === 'self') return;
+			if (!move.secondaries) {
+				move.secondaries = [];
+			}
+			move.secondaries.push({
+				chance: 30,
+				status: 'tox',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+			move.secondaries.push({
+				chance: 30,
+				status: 'par',
+				ability: this.dex.abilities.get('venomshock'),
+			});
+		},
+		name: "Venom Shock",
+		gen: 8,
+	},
+
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
@@ -675,8 +821,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// SunDraco
 	dexterity: {
-		desc: "This Pokemon's Speed is boosted by x1.1. This Pokemon cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
-		shortDesc: "x1.1 Speed; Held item cannot be removed or disabled.",
+		desc: "Normal/Ghost-type; Speed is boosted by 1.1x; cannot lose its held item or its effects due to another Pokemon by means of Knock Off, Corrosive Gas, Trick, or Magic Room.",
+		shortDesc: "Normal/Ghost; x1.1 Speed; held item cannot be removed or disabled.",
 		onModifySpePriority: 5,
 		onStart(pokemon) {
 			this.add("-ability", pokemon, "Dexterity");
@@ -700,8 +846,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 	// The Dealer
 	croupier: {
-		desc: "This Pokemon can only be damaged by direct attacks, is unaffected by opposing priority moves, will always hit its moves, and will always be hit by incoming moves.",
-		shortDesc: "Magic Guard + Dazzling + No Guard.",
+		desc: "This Pokemon can only be damaged by direct attacks, is unaffected by opposing priority moves, will always hit and get hit.",
+		shortDesc: "Immune to indirect damage and priority; always hits and gets hit.",
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
@@ -769,7 +915,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Flower Master",
 		gen: 8,
 	},
-	
+
 	// Roughskull
 	"venomshock": {
 		desc: "Every move the user uses has a 30% chance to badly poison or paralyze the target.",

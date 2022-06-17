@@ -24,12 +24,24 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rising Surge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	Bleu: {
+		species: 'Milotic', ability: 'Wizardry', item: 'White Herb', gender: 'F',
+		moves: ['Flamethrower', 'Thunderbolt', 'Ice Beam'],
+		signatureMove: 'Blue Magic',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0}, nature: 'Modest',
+	},
 	Brookeee: {
 		species: 'Primeape', ability: 'Aggression', item: 'Ramen', gender: 'F',
 		moves: ['Ice Punch', 'Stomping Tantrum', 'Endure'],
 		signatureMove: 'Masochism',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
+	/*'☆Chandie': {
+		species: 'Chandelure', ability: 'Grasp the Flame', item: 'Phantom Presence', gender: 'M',
+		moves: ['Recover', 'Focus Blast', 'Hex'],
+		signatureMove: 'Conflagration',
+		evs: {hp: 252, spa: 4, spe: 252}, happiness: 0, nature: 'Timid',
+	},*/
 	'Chocolate Pudding': {
 		species: 'Drowzee', ability: 'Fudge-Filled Body', item: 'Parfait Spoon', gender: 'M',
 		moves: ['Glacial Lance', 'Drain Punch', 'Photon Geyser'],
@@ -63,8 +75,14 @@ export const ssbSets: SSBSets = {
 	Hell: {
 		species: "Gengar", ability: "Sinner's Punishment", item: "Air Blimp", gender: "M",
 		moves: ["Thunderbolt", "Dark Pulse", "Flamethrower"],
-		signatureMove: "Hade's Erinyes",
+		signatureMove: "Hades' Erinyes",
 		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: "Timid",
+	},
+	Hibachi: {
+		species: 'Beedrill', ability: 'Chain', item: 'Life Orb', gender: 'F',
+		moves: ['Protect', 'Attack Order', 'Flare Blitz'],
+		signatureMove: 'Washing Machine',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	Horrific17: {
 		species: 'Arcanine', ability: 'Fair Fight', item: 'Horrifium Z', gender: 'M',
@@ -82,6 +100,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Protect', 'Refresh', 'Recover'],
 		signatureMove: 'Ultima',
 		evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Calm', shiny: true,
+	},
+	Katt: {
+		species: 'Persian-Alola', ability: 'Gladiator', item: 'Lum Berry', gender: 'F',
+		moves: ['Double Iron Bash', 'Reversal', 'Power Trip'],
+		signatureMove: 'Devil Charge',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly', shiny: true,
 	},
 	LandoriumZ: {
 		species: 'Crobat', ability: 'Retaliation', item: 'Bright Powder', gender: 'M',
@@ -178,7 +202,7 @@ export const ssbSets: SSBSets = {
 		species: 'Marshadow', ability: 'Vindictive', item: 'Life Orb', gender: 'N',
 		moves: ['Thousand Arrows', 'Glacial Lance', 'Close Combat'],
 		signatureMove: 'Karma',
-		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 	},
 	'Yuuka Kazami': {
 		species: 'Lilligant', ability: 'Flower Master', item: 'Big Root', gender: 'F',

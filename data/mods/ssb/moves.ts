@@ -12,7 +12,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		category: "Physical",
 		desc: "+30 power for each of the user's stat boosts.",
-		shortDesc: "+30 BP for each of user's boosts.",
+		shortDesc: "+30 BP/boost",
 		name: "Rising Surge",
 		gen: 8,
 		pp: 10,
@@ -27,6 +27,52 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+	},
+
+	// Bleu
+	bluemagic: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Prevents moves from affecting the user this turn; Sunny Day if the user is Fire-type; Electric Terrain if Electric; Hail and Aurora Veil if Ice; otherwise, fully heals HP and status condition but lowers Defense and Special Defense by 1 stage; this move's type is the same as the user's.",
+		shortDesc: "Protection; effect depends on user's type; same type as user's.",
+		name: "Blue Magic",
+		gen: 8,
+		pp: 5,
+		priority: 4,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Protect', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+			if (pokemon.types[0] === 'Electric') {
+				this.actions.useMove('Electric Terrain', pokemon);
+			} else if (pokemon.types[0] === 'Fire') {
+				this.actions.useMove('Sunny Day', pokemon);
+			} else if (pokemon.types[0] === 'Ice') {
+				this.actions.useMove('Hail', pokemon);
+				this.actions.useMove('Aurora Veil', pokemon);
+			} else {
+				this.heal(pokemon.maxhp);
+				pokemon.cureStatus();
+				this.boost({def: -1, spd: -1}, pokemon);
+			}
+		},
+		onModifyType(move, pokemon, target) {
+			move.type = pokemon.types[0];
+		},
+		stallingMove: true,
+		volatileStatus: 'protect',
+		secondary: null,
+		target: "self",
+		type: "???",
 	},
 
 	// Brookeee
@@ -55,6 +101,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fighting",
 	},
 
+	// ☆Chandie
+	conflagration: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "Burns target; consumes target's burn to heal 50% of damage dealt.",
+		shortDesc: "Burns; consumes burn to heal 50% of damage.",
+		name: "Conflagration",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {heal: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flamethrower', source);
+		},
+		onModifyMove(move, target) {
+			if (target.status === 'brn') move.drain = [1, 2];
+		},
+		onHit(target) {
+			if (target.status === 'brn') target.cureStatus();
+		},
+		status: 'brn',
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+
 	// Chocolate Pudding
 	steadybaking: {
 		accuracy: 100,
@@ -64,7 +140,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower + 40 * pokemon.volatiles['stockpile'].layers;
 		},
 		category: "Physical",
-		desc: "Gives the user 1 layer of Stockpile; +40 BP for each layer.",
+		desc: "Gives the user 1 layer of Stockpile; +40 power for each layer.",
 		shortDesc: "+1 Stockpile; +40 BP for each.",
 		name: "Steady Baking",
 		gen: 8,
@@ -284,7 +360,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 100,
 		category: "Physical",
 		desc: "Always results in a critical hit; confuses the target.",
-		shortDesc: "Critical hits and confuses target.",
+		shortDesc: "Crits; confuses target.",
 		name: "Cranberry Cutter",
 		gen: 8,
 		pp: 10,
@@ -298,10 +374,37 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Psychic', target);
 			this.add('-anim', source, 'Sky Drop', target);
 		},
-		critRatio: 5,
+		willCrit: true,
 		volatileStatus: 'confusion',
 		secondary: null,
 		target: "Normal",
+		type: "Psychic",
+	},
+	
+	// Genwunner
+	psychicbind: {
+		accuracy: 75,
+		basePower: 40,
+		category: "Special",
+		desc: "Traps the target for 4-5 turns; flinches target.",
+		shortDesc: "Partially traps and flinches target.",
+		name: "Psychic Bind",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Psychic', target);
+		},
+		volatileStatus: 'partiallytrapped',
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
 		type: "Psychic",
 	},
 
@@ -334,33 +437,38 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Ghost",
 	},
 
-	// Genwunner
-	psychicbind: {
-		accuracy: 75,
-		basePower: 40,
+	// Hibachi
+	washingmachine: {
+		accuracy: true,
+		basePower: 0,
 		category: "Special",
-		desc: "Traps the target for 4-5 turns; 100% chance to flinch.",
-		shortDesc: "Partially traps target; 100% flinch.",
-		name: "Psychic Bind",
+		desc: "Instantly faints the target, ignoring immunity; fails if target attacks.",
+		shortDesc: "OHKO's target, ignoring immunity; fails if target attacks.",
+		name: "Washing Machine",
 		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {mirror: 1, protect: 1},
+		pp: 5,
+		priority: 5,
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Psychic', target);
+			this.add('-anim', source, 'Light That Burns the Sky', target);
 		},
-		volatileStatus: 'partiallytrapped',
-		secondary: {
-			chance: 100,
-			volatileStatus: 'flinch',
+		onTry(source, target) {
+			const action = this.queue.willMove(target);
+			const move = action?.choice === 'move' ? action.move : null;
+			if (move && move.category !== 'Status') {
+				return false;
+			}
 		},
+		ohko: true,
+		ignoreAbility: true,
+		secondary: null,
 		target: "normal",
-		type: "Psychic",
+		type: "???",
 	},
- 
+
 	// Horrific17
 	meteorcharge: {
 		accuracy: 100,
@@ -427,8 +535,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			return move.basePower + 5 * pokemon.positiveBoosts();
 		},
 		category: "Special",
-		desc: "This move's type is the same as user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
-		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP per boost.",
+		desc: "This move's type is the same as the user's; boosts Special Attack and Speed by 1 stage; +5 power for each boost.",
+		shortDesc: "Same type as user's; boosts SpA and Spe by 1; +5 BP/boost.",
 		name: "Ultima",
 		gen: 8,
 		pp: 40,
@@ -452,6 +560,81 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "???"
+	},
+
+	// Katt
+	devilcharge: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "User survives attacks this turn with at least 1 HP; boosts Attack and Speed by 1 stage.",
+		shortDesc: "Survives attacks; +1 Atk/Spe.",
+		name: "Devil Charge",
+		gen: 8,
+		pp: 10,
+		priority: 4,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bulk Up', source);
+		},
+		onTryHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		stallingMove: true,
+		volatileStatus: 'endure',
+		boosts: {
+			atk: 1,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
+
+	// Katt
+	counterattack: {
+		accuracy: true,
+		basePower: 0,
+		damageCallback(pokemon) {
+			const lastDamagedBy = pokemon.getLastDamagedBy(true);
+			if (lastDamagedBy !== undefined) {
+				return (lastDamagedBy.damage) || 1;
+			}
+			return 0;
+		},
+		category: "Physical",
+		desc: "Returns damage received if attacked.",
+		shortDesc: "Returns damage.",
+		name: "Counterattack",
+		gen: 8,
+		pp: 20,
+		priority: -5,
+		flags: {contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'High Jump Kick', target);
+		},
+		onTry(source) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy === undefined || !lastDamagedBy.thisTurn) return false;
+		},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
+			}
+		},
+		secondary: null,
+		target: "scripted",
+		type: "???",
 	},
 
 	// LandoriumZ
@@ -667,7 +850,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	
 	// Mink the Putrid
 	madtoxin: {
-		accuracy: 85,
+		accuracy: 90,
 		basePower: 0,
 		category: "Status",
 		desc: "Very badly poisons the target; ignores typing and protection.",
@@ -740,8 +923,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Golden Order effect starts for the user; Halves damage taken from attacks, makes the user always move last, and allows use of Faith Fray the Damned.",
-		shortDesc: "Starts Golden Order for the user.",
+		desc: "Golden Order effect starts for the user; halves damage taken from attacks, makes the user move last, and allows the usage of Faith Fray the Damned.",
+		shortDesc: "Starts Golden Order for user.",
 		name: "Golden Order",
 		gen: 8,
 		pp: 5,
@@ -788,8 +971,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 200,
 		category: "Physical",
-		desc: "Ignores resistances and immunities, hits Ghost-types supereffectively. User faints, replacement's Speed and Defense are raised by 1.",
-		shortDesc: "Ignores resistances. User faints.",
+		desc: "Ignores resistance and immunity; super-effective against Ghost-types; user faints to boost replacement's Speed and Defense by 1 stage.",
+		shortDesc: "Ignores resistance and immunity; SE against Ghost; boosts replacement's Spe and Def by 1.",
 		name: "Faith Fray the Damned",
 		gen: 8,
 		pp: 1,
@@ -863,8 +1046,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePower: 0,
 		category: "Status",
 		name: "Plagiarize",
-		desc: "Replaces this move with the targets last move. Completely removes the PP of the target's last move.",
-		shortDesc: "Replaces with the target's last move; removes PP.",
+		desc: "Replaces this move with the target's last move and said move becomes 0 PP.",
+		shortDesc: "Replaced with target's last move and said move becomes 0 PP.",
 		gen: 8,
 		pp: 10,
 		priority: 0,
@@ -910,8 +1093,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Uses one random move from each fainted ally. All attacking moves called through this effect have their power halved.",
-		shortDesc: "Uses moves from fainted allies at halved power.",
+		desc: "Uses a random move from each fainted ally at 0.5x power.",
+		shortDesc: "Uses moves from fainted allies at 0.5x BP.",
 		name: "Zombie Fairy",
 		gen: 8,
 		pp: 10,
@@ -973,8 +1156,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",
-		desc: "Power doubles if the target is poisoned, has a 30% chance to cause the target to flinch, and supresses the target's ability. Move will be either Physical or Special depending on which is stronger.",
-		shortDesc: "Power doubles if foe poisoned. 30% flinch chance.",
+		desc: "Power doubles if the target is poisoned; 30% chance to flinch the target; suppresses the target's ability; this move is Physical or Special depending on the user's higher Attack stat.",
+		shortDesc: "2x BP if target is poisoned; 30% flinch; suppresses ability; category depends on user's higher Attack.",
 		name: "Radiation Stench",
 		pp: 10,
 		priority: 0,
@@ -1271,8 +1454,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-		desc: "Usually goes first. Combines Fire into type effectiveness. User switches if below 1/3 max HP.",
-		shortDesc: "+Fire-type effectiveness. Switches if below 1/3 HP.",
+		desc: "+1 priority; combines Fire into type effectiveness; user switches if at or below 1/3 of max HP.",
+		shortDesc: "+Fire-type effectiveness; switches if <= 1/3 HP.",
 		name: "Ein Sol",
 		gen: 8,
 		pp: 10,
@@ -1305,8 +1488,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Taunts, Torments, and Baton Passes if Hoopa; 80BP Physical Dark-type if Hoopa-Unbound. Ignores opposing stat changes.",
-		shortDesc: "Effects vary on forme. Ignores stat changes.",
+		desc: "Taunts, Torments, and Baton Passes if Hoopa; 80 BP Physical Dark-type attack if Hoopa-Unbound; ignores stat stage changes.",
+		shortDesc: "Effects vary on form; ignores stat changes.",
 		name: "Tap Out",
 		pp: 10,
 		priority: 0,
@@ -1472,7 +1655,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "If Hoopa, uses Roll the Dice twice. If Hoopa-Unbound, becomes Dark-type, Phyiscal, 150 BP, steals stat boosts before dealing damage, and the user faints.",
+		desc: "If Hoopa, uses Roll the Dice twice; otherwise, becomes Dark-type, Physical, 150 BP, steals stat boosts before dealing damage, and faints the user.",
 		shortDesc: "Effects and power depend on form.",
 		name: "The House Always Wins",
 		isZ: "doubleornothing",

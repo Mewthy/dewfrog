@@ -148,7 +148,13 @@ export const ssbSets: SSBSets = {
 		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
 		moves: ['Sucker Punch', 'Drain Punch', 'Sand Tomb'],
 		signatureMove: 'Radiation Stench',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+		evs: {hp: 252, atk: 200, spa: 56}, nature: 'Quiet',
+	},
+	'Ruffbot': {
+		species: 'Pokestar F-00', ability: 'RNG Script', item: 'Nuts and Bolts', gender: 'M',
+		moves: ['Thunderbolt', 'Flamethrower', 'Flash Cannon'],
+		signatureMove: 'Advanced A.I',
+		evs: {hp: 4, def: 252, spe: 252}, nature: 'Timid',
 	},
 	Satori: {
 		species: 'Gardevoir', ability: 'Mind Reading', item: 'Third Eye', gender: 'F',

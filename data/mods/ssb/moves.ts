@@ -306,13 +306,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Hell
-	hadeserinyes: {
+	plutoserinyes: {
 		accuracy: 100,
 		basePower: 30,
 		category: "Special",
 		desc: "Hits 3 times. Each hit has a 20% chance to lower the target's Special Defense by 1 stage.",
 		shortDesc: "Hits 3 times. 20% chance of SpDef drop per hit.",
-		name: "Hade's Erinyes",
+		name: "Pluto's Erinyes",
 		gen: 8,
 		pp: 15,
 		priority: 0,
@@ -1012,6 +1012,57 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Poison",
 	},
+	
+	// Ruffbot
+	advancedai: {
+		accuracy: 100,
+		basePower: 120,
+		categoy: "Special",
+		desc: "This move hits one turn after being used. Changes the type of the user to typeless. Heals 1/4 of the users health. Deals inverse effectiveness to the target.",
+		shortDesc: "Hits one turn after use; Becomes typeless; Heals 1/4; Inverse effectiveness.",
+		name: "Advanced A.I",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {bypasssub: 1, heal: 1},
+		ignoreImmunity: true,
+		isFutureMove: true,
+		onTry(source, target) {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
+				duration: 2,
+				move: 'advancedai',
+				source: source,
+				moveData: {
+					id: 'advancedai',
+					name: "Advanced A.I",
+					accuracy: 100,
+					basePower: 120,
+					category: "Special",
+					priority: 0,
+					flags: {bypasssub: 1, heal: 1},
+					ignoreImmunity: false,
+					effectType: 'Move',
+					isFutureMove: true,
+					type: 'Normal',
+				},
+			});
+			this.add('-start', source, 'move: Advanced A.I');
+			return this.NOT_FAIL;
+		},
+		onHit(pokemon, source, move) {
+			this.heal(pokemon.maxhp / 4, source, source, move);
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel', 'Rock', 'Ghost') return 1;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Doom Desire', source);
+			this.add('-anim', source, 'Boomburst', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
 
 	// Satori
 	terrifyinghypnotism: {

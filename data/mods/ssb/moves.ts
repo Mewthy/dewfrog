@@ -753,8 +753,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-	
-	//Mewth
+
+	// Mewth
 	oblivionbanisher: {
 		accuracy: 100,
 		basePower: 90,
@@ -765,10 +765,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -784,7 +781,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "allAdjacent",
 		type: "Ghost",
 	},
-	
+
+	// Mewth
 	nightmarerealm: {
 		accuracy: true,
 		basePower: 0,
@@ -796,6 +794,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+		},
 		terrain: 'nightmarerealm',
 		condition: {
 			duration: 5,
@@ -820,6 +824,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return true;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fairy' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('nighatmre realm boost');
@@ -828,23 +833,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect.name, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Nightmare Realm');
 				}
 				this.add('-message', 'The battlefield became dark! Sweet dreams!');
-				}
 			},
 			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(pokemon) {
-				if (pokemon.isSemiInvulnerable()) return;
-				if (!pokemon || pokemon.hasType('Ghost')) return;
-				if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
-					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
-				}
+				if (!pokemon.hasType('Ghost')) this.damage(pokemon.baseMaxhp / 16, pokemon);
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Nightmare Realm');
 			},
@@ -853,7 +854,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "all",
 		type: "Ghost",
 	},
-	
+
 	// Mink the Putrid
 	madtoxin: {
 		accuracy: 90,

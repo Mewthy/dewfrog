@@ -439,16 +439,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Hibachi
 	washingmachine: {
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target, ignoring immunity; fails if target attacks.",
-		shortDesc: "OHKO's target, ignoring immunity; fails if target attacks.",
+		desc: "Instantly faints the target but lowers Attack and Speed by 2 stages; fails if target attacks.",
+		shortDesc: "OHKO's target but -2 Atk & Spe; fails if target attacks.",
 		name: "Washing Machine",
 		gen: 8,
-		pp: 5,
-		priority: 5,
-		flags: {bypasssub: 1},
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {bullet: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -462,8 +463,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 		},
+		self: {
+			boosts: {
+				atk: -2,
+				spe: -2,
+			},
+		},
 		ohko: true,
-		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
 		type: "???",

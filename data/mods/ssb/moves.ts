@@ -29,6 +29,36 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Back At My Day
+	nom: {
+		accuracy: true,
+		basePower: 100,
+		category: "Physical",
+		desc: "Restores user's item.",
+		shortDesc: "Restores item.",
+		name: "Nom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bite', target);
+		},
+		onHit(pokemon) {
+			if (pokemon.item || !pokemon.lastItem) return false;
+			const item = pokemon.lastItem;
+			pokemon.lastItem = '';
+			this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Nom');
+			pokemon.setItem(item);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
 	// Bleu
 	bluemagic: {
 		accuracy: true,

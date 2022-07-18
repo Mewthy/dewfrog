@@ -24,6 +24,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Rising Surge',
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
+	'Back At My Day': {
+		species: 'Snorlax', ability: 'Shadow Tag', item: 'Chesto Berry', gender: 'M',
+		moves: ['Rest', 'Curse', 'Spectral Thief'],
+		signatureMove: 'Nom',
+		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+	},
 	Bleu: {
 		species: 'Milotic', ability: 'Wizardry', item: 'White Herb', gender: 'F',
 		moves: ['Flamethrower', 'Thunderbolt', 'Ice Beam'],

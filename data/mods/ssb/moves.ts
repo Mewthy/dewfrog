@@ -60,6 +60,31 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+	
+	// Bahamut
+	megaflare: {
+		accuracy: true,
+		basePower: 0,
+		damage: 150,
+		category: "Special",
+		desc: "Deals 150 damage; ignores ability, protection and substitute.",
+		shortDesc: "150 damage; ignores ability, protect and sub.",
+		name: "Megaflare",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {bypasssub: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Explosion', target);
+		},
+		ignoreAbility: true,
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 
 	// Bleu
 	bluemagic: {

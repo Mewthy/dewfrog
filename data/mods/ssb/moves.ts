@@ -47,12 +47,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Bite', target);
 		},
-		onHit(pokemon) {
-			if (pokemon.item || !pokemon.lastItem) return false;
-			const item = pokemon.lastItem;
-			pokemon.lastItem = '';
-			this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Nom');
-			pokemon.setItem(item);
+		self: {
+			onHit(pokemon) {
+				if (pokemon.item || !pokemon.lastItem) return false;
+				const item = pokemon.lastItem;
+				pokemon.lastItem = '';
+				this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Nom');
+				pokemon.setItem(item);
+			},
 		},
 		secondary: null,
 		target: "normal",

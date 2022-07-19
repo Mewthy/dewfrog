@@ -1080,7 +1080,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Pablo
-	"plagiarize": {
+	plagiarize: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1128,7 +1128,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Rin Kaenbyou
-	"zombiefairy": {
+	zombiefairy: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1165,7 +1165,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Rin Kaenbyou
-	"rekindlingofdeadashes": {
+	rekindlingofdeadashes: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1191,7 +1191,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	
 	// Roughskull
-	"radiationstench": {
+	radiationstench: {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",

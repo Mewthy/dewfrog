@@ -277,12 +277,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender, move) {
 			this.debug('Dual Receptors boost');
-			return this.chainModify([5448, 4096]);
+			return this.chainModify(1.33);
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender, move) {
 			this.debug('Dual Receptors boost');
-			return this.chainModify([5448, 4096]);
+			return this.chainModify(1.33);
 		},
 		isPermanent: true,
 		name: "Dual Receptors",
@@ -717,7 +717,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			this.field.clearWeather();
 		},
-		isBreakable: true,
 		name: "Gold Pinion",
 		gen: 8,
 	},
@@ -800,12 +799,29 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Ruffbot
+	"rngscript": {
+		desc: "This Pokemon's moves with secondary effects will always activate.",
+		shortDesc: "Secondary effects will always trigger.",
+		onModifyMovePriority: -2,
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('doubling secondary chance');
+				for (const secondary of move.secondaries) {
+					if (secondary.chance) secondary.chance = true;
+				}
+			}
+			if (move.self?.chance) move.self.chance = true;
+		},
+		name: "RNG Script",
+		gen: 8,
+	},
+
 	// Satori
 	mindreading: {
 		desc: "This Pokemon uses Mind Reader and Torment on switch-in.",
 		shortDesc: "Mind Reader & Torment on switch-in.",
 		onSwitchIn(pokemon) {
-			//if (pokemon.species.baseSpecies !== 'Gardevoir') return;
 			const newMoves = ["Calm Mind", "Zap Cannon", "Psychic", "Terrifying Hypnotism"];
 			const newMoveSlots = changeMoves(this, pokemon, newMoves);
 			pokemon.m.terrifyinghypnotism = false;
@@ -830,7 +846,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
     		pokemon.types = ["Normal", "Ghost"];
 		},
 		onModifySpe(spe) {
-			return this.chainModify([4505, 4096]);
+			return this.chainModify(1.1);
 		},
 		onTakeItem(item, pokemon, source) {
 			if (!this.activeMove) throw new Error("Battle.activeMove is null");
@@ -887,6 +903,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (move.self?.chance) move.self.chance *= 2;
 			}
 		},
+		isBreakable: true,
 		name: "Croupier",
 		gen: 8,
 	},
@@ -914,87 +931,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.actions.useMove('Ingrain', pokemon);
 		},
 		name: "Flower Master",
-		gen: 8,
-	},
-
-	// Roughskull
-	"venomshock": {
-		desc: "Every move the user uses has a 30% chance to badly poison or paralyze the target.",
-		shortDesc: "Every move has a 30% chance to toxicate or paralyze target.",
-		onModifyMove(move) {
-			if (!move || move.target === 'self') return;
-			if (!move.secondaries) {
-				move.secondaries = [];
-			}
-			move.secondaries.push({
-				chance: 30,
-				status: 'tox',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-			move.secondaries.push({
-				chance: 30,
-				status: 'par',
-				ability: this.dex.abilities.get('venomshock'),
-			});
-		},
-		name: "Venom Shock",
-		gen: 8,
-	},
-	
-	// Ruffbot
-	"rngscript": {
-		desc: "This Pokemon move's that have secondary effects are guaranteed to activate.",
-		shortDesc: "Guarantees second effects to activate.",
-		onModifyMovePriority: -2,
-		onModifyMove(move) {
-			if (move.secondaries) {
-				this.debug('doubling secondary chance');
-				for (const secondary of move.secondaries) {
-					if (secondary.chance) secondary.chance = true;
-				}
-			}
-			if (move.self?.chance) move.self.chance = true;
-		},
-		name: "RNG Script",
-		gen: 8,
-	},
-
-	// Rin Kaenbyou
-	"catswalk": {
-		desc: "New typing is Fire/Ghost. This pokemon gains 1 random stat boost for every dead ally on switch-in. Heal +3% HP per turn for every dead ally.",
-		shortDesc: "Fire/Ghost; Gains buffs for each fainted ally.",
-		onStart(pokemon) {
-			this.add("-ability", pokemon, "Cat's Walk");
-    		pokemon.types = ["Fire", "Ghost"];
-			for (const ally of pokemon.side.pokemon) {
-				if (ally.fainted) {
-					let stats: BoostID[] = [];
-					const boost: SparseBoostsTable = {};
-					let statPlus: BoostID;
-					for (statPlus in pokemon.boosts) {
-						if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-						if (pokemon.boosts[statPlus] < 6) {
-							stats.push(statPlus);
-						}
-					}
-					let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-					if (randomStat) boost[randomStat] = 1;
-					this.boost(boost);
-				}
-			}
-		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			let healInt = 0;
-			for (const ally of pokemon.side.pokemon) {
-				if (ally.fainted) {
-					healInt += pokemon.maxhp / 33.3;
-				}
-			}
-			if (healInt > 0) this.heal(healInt);
-		},
-		name: "Cat's Walk",
 		gen: 8,
 	},
 };

@@ -25,10 +25,16 @@ export const ssbSets: SSBSets = {
 		evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 	},
 	'Back At My Day': {
-		species: 'Snorlax', ability: 'Shadow Tag', item: 'Chesto Berry', gender: 'M',
+		species: 'Snorlax', ability: 'Boom', item: 'Chesto Berry', gender: 'M',
 		moves: ['Rest', 'Coil', 'Spectral Thief'],
 		signatureMove: 'Nom',
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+	},
+	Bahamut: {
+		species: 'Salamence', ability: 'Countdown', item: 'Life Orb', gender: 'N',
+		moves: ['Clanging Scales', 'Aeroblast', 'Blue Flare'],
+		signatureMove: 'Megaflare',
+		evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
 	Bleu: {
 		species: 'Milotic', ability: 'Wizardry', item: 'White Herb', gender: 'F',

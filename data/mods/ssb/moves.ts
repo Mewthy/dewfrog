@@ -60,7 +60,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
-	
+
 	// Bahamut
 	megaflare: {
 		accuracy: true,

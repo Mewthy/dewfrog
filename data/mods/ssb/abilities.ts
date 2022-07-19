@@ -159,6 +159,36 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 8,
 	},
 
+	// Back At My Day
+	boom: {
+		desc: "This Pokemon removes 1/2 of foe's HP upon fainting.",
+		shortDesc: "Removes 1/2 of foe's HP upon fainting.",
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!target.hp) {
+				this.damage(source.baseMaxhp / 2, source, target);
+			}
+		},
+		name: "Boom",
+		gen: 8,
+	},
+
+	// Bahamut
+	countdown: {
+		desc: "This Pokemon will become Salamence-Mega in 3 turns.",
+		shortDesc: "Mega in 3 turns.",
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.species.id === 'salamence' && pokemon.hp && !pokemon.transformed && pokemon.activeTurns === 3) {
+				this.add('-activate', pokemon, 'ability: Countdown');
+				pokemon.formeChange('Salamence-Mega', this.effect, true);
+			}
+		},
+		name: "Countdown",
+		gen: 8,
+	},
+
 	// Bleu
 	wizardry: {
 		desc: "This Pokemon moves first in its priority bracket; becomes the same type as the move's that it uses.",

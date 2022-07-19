@@ -737,7 +737,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Rin Kaenbyou
-	"catswalk": {
+	catswalk: {
 		desc: "Fire/Ghost-type; heals 3% of max HP every turn and gains 1 random stat boost for every fainted ally.",
 		shortDesc: "Fire/Ghost; +3% HP/turn and gains 1 random boost per fainted ally.",
 		onStart(pokemon) {
@@ -776,7 +776,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Roughskull
-	"venomshock": {
+	venomshock: {
 		desc: "This Pokemon's moves have a 30% chance to badly poison and a 30% chance to paralyse the target.",
 		shortDesc: "Moves have a 30% chance to badly poison or paralyse.",
 		onModifyMove(move) {
@@ -800,7 +800,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 
 	// Ruffbot
-	"rngscript": {
+	rngscript: {
 		desc: "This Pokemon's moves with secondary effects will always activate.",
 		shortDesc: "Secondary effects will always trigger.",
 		onModifyMovePriority: -2,

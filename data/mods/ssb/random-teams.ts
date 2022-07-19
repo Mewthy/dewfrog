@@ -26,7 +26,7 @@ export const ssbSets: SSBSets = {
 	},
 	'Back At My Day': {
 		species: 'Snorlax', ability: 'Shadow Tag', item: 'Chesto Berry', gender: 'M',
-		moves: ['Rest', 'Curse', 'Spectral Thief'],
+		moves: ['Rest', 'Coil', 'Spectral Thief'],
 		signatureMove: 'Nom',
 		evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
 	},
@@ -180,7 +180,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Radiation Stench',
 		evs: {hp: 252, atk: 200, spa: 56}, nature: 'Quiet',
 	},
-	'Ruffbot': {
+	Ruffbot: {
 		species: 'Pokestar F-00', ability: 'RNG Script', item: 'Nuts and Bolts', gender: 'M',
 		moves: ['Thunderbolt', 'Flamethrower', 'Flash Cannon'],
 		signatureMove: 'Advanced A.I',

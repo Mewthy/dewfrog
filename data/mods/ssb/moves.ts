@@ -29,6 +29,63 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Fairy",
 	},
 
+	// Back At My Day
+	nom: {
+		accuracy: true,
+		basePower: 100,
+		category: "Physical",
+		desc: "Restores user's item.",
+		shortDesc: "Restores item.",
+		name: "Nom",
+		gen: 8,
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, mirror: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bite', target);
+		},
+		self: {
+			onHit(pokemon) {
+				if (pokemon.item || !pokemon.lastItem) return false;
+				const item = pokemon.lastItem;
+				pokemon.lastItem = '';
+				this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Nom');
+				pokemon.setItem(item);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
+
+	// Bahamut
+	megaflare: {
+		accuracy: true,
+		basePower: 0,
+		damage: 150,
+		category: "Special",
+		desc: "Deals 150 damage; ignores ability, protection and substitute.",
+		shortDesc: "150 damage; ignores ability, protect and sub.",
+		name: "Megaflare",
+		gen: 8,
+		pp: 5,
+		priority: 0,
+		flags: {bypasssub: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', target, 'Explosion', target);
+		},
+		ignoreAbility: true,
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
+
 	// Bleu
 	bluemagic: {
 		accuracy: true,
@@ -439,16 +496,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 	// Hibachi
 	washingmachine: {
-		accuracy: true,
+		accuracy: 100,
 		basePower: 0,
 		category: "Special",
-		desc: "Instantly faints the target, ignoring immunity; fails if target attacks.",
-		shortDesc: "OHKO's target, ignoring immunity; fails if target attacks.",
+		desc: "Instantly faints the target but lowers Attack and Speed by 2 stages; fails if target attacks.",
+		shortDesc: "OHKO's target but -2 Atk & Spe; fails if target attacks.",
 		name: "Washing Machine",
 		gen: 8,
-		pp: 5,
-		priority: 5,
-		flags: {bypasssub: 1},
+		pp: 1,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {bullet: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -462,8 +520,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				return false;
 			}
 		},
+		self: {
+			boosts: {
+				atk: -2,
+				spe: -2,
+			},
+		},
 		ohko: true,
-		ignoreAbility: true,
 		secondary: null,
 		target: "normal",
 		type: "???",
@@ -747,8 +810,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Steel",
 	},
-	
-	//Mewth
+
+	// Mewth
 	oblivionbanisher: {
 		accuracy: 100,
 		basePower: 90,
@@ -759,10 +822,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 8,
 		pp: 5,
 		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -778,7 +838,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "allAdjacent",
 		type: "Ghost",
 	},
-	
+
+	// Mewth
 	nightmarerealm: {
 		accuracy: true,
 		basePower: 0,
@@ -790,6 +851,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		pp: 10,
 		priority: 0,
 		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Agility', source);
+		},
 		terrain: 'nightmarerealm',
 		condition: {
 			duration: 5,
@@ -814,6 +881,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return true;
 				}
 			},
+			onBasePowerPriority: 6,
 			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fairy' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('nighatmre realm boost');
@@ -822,23 +890,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Nightmare Realm', '[from] ability: ' + effect.name, '[of] ' + source);
 				} else {
 					this.add('-fieldstart', 'move: Nightmare Realm');
 				}
 				this.add('-message', 'The battlefield became dark! Sweet dreams!');
-				}
 			},
 			onResidualOrder: 5,
+			onResidualSubOrder: 1,
 			onResidual(pokemon) {
-				if (pokemon.isSemiInvulnerable()) return;
-				if (!pokemon || pokemon.hasType('Ghost')) return;
-				if (this.damage(pokemon.baseMaxhp / 16, pokemon)) {
-					this.add('-message', `${pokemon.name} was hurt by the terrain!`);
-				}
+				if (!pokemon.hasType('Ghost')) this.damage(pokemon.baseMaxhp / 16, pokemon);
 			},
-			onFieldResidualOrder: 21,
-			onFieldResidualSubOrder: 3,
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
 			onFieldEnd() {
 				this.add('-fieldend', 'move: Nightmare Realm');
 			},
@@ -847,7 +911,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "all",
 		type: "Ghost",
 	},
-	
+
 	// Mink the Putrid
 	madtoxin: {
 		accuracy: 90,
@@ -1041,7 +1105,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Pablo
-	"plagiarize": {
+	plagiarize: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1089,7 +1153,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Rin Kaenbyou
-	"zombiefairy": {
+	zombiefairy: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1126,7 +1190,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 
 	// Rin Kaenbyou
-	"rekindlingofdeadashes": {
+	rekindlingofdeadashes: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
@@ -1152,7 +1216,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	
 	// Roughskull
-	"radiationstench": {
+	radiationstench: {
 		accuracy: 100,
 		basePower: 120,
 		category: "Physical",

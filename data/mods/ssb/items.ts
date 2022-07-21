@@ -93,23 +93,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 8,
 		desc: "Holder cannot be struck by a critical hit.",
 	},
-	
-	// Ruffbots
-	nutsandbolts: {
-		name: "Nuts and Bolts",
-		onModifySpAPriority: 1,
-        onModifySpA(spa, pokemon) {
-            if (pokemon.species.name !== "Pokestar F-00") return false;
-            return this.chainModify(1.5);
-        },
-onModifySpDPriority: 1,
-        onModifySpD(spd, pokemon) {
-            if (pokemon.species.name !== "Pokestar F-00") return false;
-            return this.chainModify(1.5);
-        },
-		gen: 8,
-		desc: "If held by Pokestar F-00, it's Sp. Atk and Sp. Def are 1.5x.",
-	},
 
 	// Finger
 	metronomiumz: {
@@ -126,6 +109,10 @@ onModifySpDPriority: 1,
 	// Hell
 	airblimp: {
 		name: "Air Blimp",
+		spritenum: 6,
+		fling: {
+			basePower: 10,
+		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm' || type === 'hail' || type === 'powder') return false;
 		},
@@ -154,26 +141,31 @@ onModifySpDPriority: 1,
 		gen: 8,
 		desc: "If held by an Arcanine with Meteor Charge, it can use Final Trick.",
 	},
-	
-	//Mewth
+
+	// Mewth
 	spiritemblem: {
 		name: "Spirit Emblem",
 		spritenum: 180,
 		fling: {
 			basePower: 30,
 		},
-		if (move.type === 'Ghost') {
-			return critRatio + 2;
+		onModifyCritRatio(critRatio, move) {
+			if (move.type === 'Ghost') {
+				return critRatio + 2;
+			}
 		},
 		gen: 8,
-		desc: "The holder has their Ghost types moves have a higher chance to land a critical hit.",
-		shortDesc: "Crit Ratio of Ghost Moves + 2.",
+		desc: "Holder's critical hit ratio for Ghost-type attacks is increased by 2 stages.",
+		shortDesc: "Ghost-type attacks have +2 crit rate.",
 	},
 
 	// Mink the Putrid
 	gurglingblossom: {
 		name: "Gurgling Blossom",
 		spritenum: 487,
+		fling: {
+			basePower: 80,
+		},
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(pokemon) {
@@ -192,18 +184,22 @@ onModifySpDPriority: 1,
 	// Neptune
 	stormtalisman: {
 		name: "Storm Talisman",
+		spritenum: 149,
+		fling: {
+			basePower: 10,
+		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			const weather = ["hurricane", "thunder", "blizzard", "weatherball", "solarbeam", "solarblade"];
 			if (weather.includes(move.id)) {
-				return this.chainModify([5448, 4096]);
+				return this.chainModify(1.33);
 			}
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
 			const weather = ["hurricane", "thunder", "blizzard", "weatherball", "solarbeam", "solarblade"];
 			if (weather.includes(move.id)) {
-				return this.chainModify([5448, 4096]);
+				return this.chainModify(1.33);
 			}
 		},
 		gen: 8,
@@ -213,6 +209,10 @@ onModifySpDPriority: 1,
 	// Neptune
 	peacetalisman: {
 		name: "Peace Talisman",
+		spritenum: 172,
+		fling: {
+			basePower: 10,
+		},
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			const damagedByTarget = user.attackedBy.some(
@@ -249,6 +249,7 @@ onModifySpDPriority: 1,
  	// Roughskull
 	cheaterglasses: {
 		name: "Cheater Glasses",
+		spritenum: 35,
 		fling: {
 			basePower: 10,
 		},
@@ -285,6 +286,27 @@ onModifySpDPriority: 1,
 		desc: "On switch-in, holder raises its Attack or Special Attack depending on foe's lower Defense stat, and raises Defense or Special Defense depending on foe's higher Attack stat.  At full HP, this Pokemon takes 0.5x damage from attacks.",
  	},
 
+	// Ruffbots
+	nutsandbolts: {
+		name: "Nuts and Bolts",
+		spritenum: 273,
+		fling: {
+			basePower: 30,
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.species.name !== "Pokestar F-00") return false;
+			return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.species.name !== "Pokestar F-00") return false;
+			return this.chainModify(1.5);
+		},
+		gen: 8,
+		desc: "If held by Pokestar F-00, its Special Attack and Special Defense are 1.5x.",
+	},
+
 	// Satori
 	thirdeye: {
 		name: "Third Eye",
@@ -311,6 +333,7 @@ onModifySpDPriority: 1,
 	// SunDraco
 	fanblade: {
 		name: "Fanblade",
+		spritenum: 698,
 		fling: {
 			basePower: 50,
 			volatileStatus: 'flinch',
@@ -330,6 +353,7 @@ onModifySpDPriority: 1,
 	// The Dealer
 	doubleornothing: {
 		name: "Double or Nothing",
+		spritenum: 387,
 		onTakeItem: false,
 		zMove: "The House Always Wins",
 		zMoveFrom: "Roll the Dice",

@@ -1784,38 +1784,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Ghost",
 	},
-
-	// Yuuka Kazami
-	teradrain: {
-		accuracy: true,
-		basePower: 100,
-		category: "Special",
-		desc: "Recovers damage dealt; causes Grassy Terrain and Leech Seed; gives the target Magnet Rise; cures status ailments.",
-		shortDesc: "Recovers damage; Grassy Terrain & Leech Seed; gives target Magnet Rise; cures status.",
-		name: "Tera Drain",
-		gen: 8,
-		pp: 10,
-		priority: 0,
-		flags: {defrost: 1, heal: 1, mirror: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Giga Drain', target);
-		},
-		self: {
-			onHit(pokemon) {
-				pokemon.cureStatus();
-			},
-		},
-		volatileStatus: 'leechseed',
-		terrain: 'grassyterrain',
-		drain: [1, 1],
-		secondary: {
-			chance: 100,
-			volatileStatus: 'magnetrise',
-		},
-		target: "normal",
-		type: "Grass",
-	},
 };

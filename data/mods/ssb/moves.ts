@@ -1310,6 +1310,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
+	},
 
 	// Satori
 	terrifyinghypnotism: {
@@ -1818,5 +1819,4 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Grass",
 	},
-},
 };

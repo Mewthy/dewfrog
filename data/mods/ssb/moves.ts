@@ -474,7 +474,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Hits 3 times. 20% chance of SpDef drop per hit.",
 		name: "Pluto's Erinyes",
 		gen: 8,
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {bullet: 1, protect: 1, mirror: 1},
 		multihit: 3,
@@ -488,10 +488,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Spectral Thief', target);
+			this.add('-anim', source, 'Inferno', target);
 		},
 		target: "normal",
-		type: "Ghost",
+		type: "Fire",
 	},
 
 	// Hibachi
@@ -709,7 +709,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Confuses user.",
 		name: "Cross Dance",
 		gen: 8,
-		pp: 15,
+		pp: 10,
 		priority: 0,
 		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
@@ -1223,7 +1223,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		desc: "Power doubles if the target is poisoned; 30% chance to flinch the target; suppresses the target's ability; this move is Physical or Special depending on the user's higher Attack stat.",
 		shortDesc: "2x BP if target is poisoned; 30% flinch; suppresses ability; category depends on user's higher Attack.",
 		name: "Radiation Stench",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		volatileStatus: 'gastroacid',
 		flags: {protect: 1, mirror: 1},
@@ -1769,7 +1769,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Extra hit per fainted ally.",
 		name: "Karma",
 		gen: 8,
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		flags: {contact: 1, mirror: 1, protect: 1},
 		onTryMove() {
@@ -1795,7 +1795,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		shortDesc: "Recovers damage; Grassy Terrain & Leech Seed; gives target Magnet Rise; cures status.",
 		name: "Tera Drain",
 		gen: 8,
-		pp: 10,
+		pp: 15,
 		priority: 0,
 		flags: {defrost: 1, heal: 1, mirror: 1, protect: 1},
 		onTryMove() {

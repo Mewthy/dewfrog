@@ -1104,7 +1104,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		type: "Steel",
 	},
 
-	// Pablo
+	/* Pablo
 	plagiarize: {
 		accuracy: true,
 		basePower: 0,
@@ -1151,7 +1151,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
-
+*/
 	// Rin Kaenbyou
 	zombiefairy: {
 		accuracy: true,

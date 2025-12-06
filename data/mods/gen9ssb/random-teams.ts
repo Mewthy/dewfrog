@@ -19,23 +19,83 @@ export interface SSBSet {
 interface SSBSets { [k: string]: SSBSet }
 
 export const ssbSets: SSBSets = {
+	Aeri: {
+		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
+		moves: ['U-turn', 'Nature\'s Madness', 'Icy Wind'],
+		signatureMove: 'Blissful Breeze',
+		evs: { hp: 252, spa: 4, spe: 252 }, nature: 'Timid',
+	},
+	'Cyclommatic Cell': {
+		species: 'Vikavolt', ability: 'Battery Life', item: 'Apparatus', gender: 'N',
+		moves: ['Parabolic Charge', 'Bug Buzz', 'Techno Blast'],
+		signatureMove: 'Galvanic Web',
+		evs: { hp: 252, spa: 252, spd: 4 }, ivs: { spe: 29 }, nature: 'Modest',
+	},
+	Emerl: {
+		species: 'Genesect', ability: 'Perfect Copy', item: 'Choice Scarf', gender: 'N',
+		moves: ['U-turn', 'Leech Life', 'Flash Cannon'],
+		signatureMove: 'Awakened Mode',
+		evs: { atk: 252, spa: 252, spe: 4 }, nature: 'Hasty',
+	},
+	Fblthp: {
+		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
+		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
+		signatureMove: 'Blow and Go',
+		evs: { hp: 248, spa: 140, spd: 120 }, nature: 'Modest',
+	},
+	Kozuchi: {
+		species: 'Tinkaton', ability: 'Scrapworker', item: 'Forged Hammer', gender: 'F',
+		moves: ['Gigaton Hammer', 'Play Rough', 'High Horsepower'],
+		signatureMove: 'Weapon Enhancement',
+		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Jolly',
+	},
+	Luminous: {
+		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: { hp: 140, def: 56, spa: 60, spd: 252 }, nature: 'Calm', shiny: true,
+	},
+	'Luminous-N': {
+		species: 'Necrozma-Ultra', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: { hp: 140, def: 56, spa: 60, spd: 252 }, nature: 'Calm', shiny: true, skip: 'Luminous',
+	},
+	Roughskull: {
+		species: 'Skuntank', ability: 'Venom Shock', item: 'Cheater Glasses', gender: 'N',
+		moves: ['Sucker Punch', 'Drain Punch', 'Strange Steam'],
+		signatureMove: 'Radiation Stench',
+		evs: { hp: 252, atk: 252, spd: 4 }, ivs: {}, nature: 'Brave',
+	},
+	'Sanae Kochiya': {
+		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
+		moves: ['Revival Blessing', 'Sparkly Swirl', 'Oblivion Wing'],
+		signatureMove: 'Miracle',
+		evs: { hp: 252, def: 4, spa: 252 }, ivs: { atk: 0 }, nature: 'Modest',
+	},
+	Sariel: {
+		species: 'Yveltal', ability: 'Angel of Death', item: 'Leftovers', gender: 'N',
+		moves: ['Recover', 'Protect', 'Foul Play'],
+		signatureMove: 'Civilization of Magic',
+		evs: { hp: 252, def: 4, spe: 252 }, ivs: { atk: 0 }, nature: 'Timid',
+	},
 	'Shifu Robot': {
 		species: 'Iron Thorns', ability: 'Auto-Repair', item: 'Absorptive Shell', gender: 'N',
 		moves: ['Techno Blast', 'Flash Cannon', 'Explosion'],
 		signatureMove: 'Turbocharge',
 		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty',
 	},
-	'Glint': {
-		species: 'Meltan', ability: 'Augment the Giants', item: 'Slag', gender: 'M',
-		moves: ['Metal Burst', 'Thunder Wave', 'Soft-Boiled'],
-		signatureMove: 'Nephilim Prayer',
-		evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+	'Suika Ibuki': {
+		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
+		moves: ['Pursuit', 'Switcheroo', 'Drain Punch'],
+		signatureMove: 'Demi',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly',
 	},
-	'Glint the Vast': {
-		species: 'Melmetal', ability: 'Augment the Giants', item: 'Molten Slag', gender: 'M',
-		moves: ['Double Iron Bash', 'Gigaton Hammer', 'Stomping Tantrum'],
-		signatureMove: 'Hammerfall',
-		evs: {atk: 252, def: 4, spd: 252}, nature: 'Adamant', skip: 'Glint',
+	'Yukari Yakumo': {
+		species: 'Lunala', ability: 'Spiriting Away', item: 'Choice Scarf', gender: 'F',
+		moves: ['Rest', 'Future Sight', 'Dark Pulse'],
+		signatureMove: 'Shikigami Ran',
+		evs: { def: 4, spa: 252, spe: 252 }, ivs: { atk: 0 }, nature: 'Timid',
 	},
 };
 

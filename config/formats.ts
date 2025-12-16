@@ -34,21 +34,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			// TODO look into making an event to put this right after turn|1
 			// https://discordapp.com/channels/630837856075513856/630845310033330206/716126469528485909
 			// Requires client change
-			this.add(`raw|<div class='broadcast-green'><b>Wondering what all these custom moves, abilities, and items do?<br />Check out the <a href="https://www.smogon.com/articles/super-staff-bros-ultimate" target="_blank">Super Staff Bros: Ultimate Guide</a> or use /ssb to find out!</b></div>`);
-			if (this.ruleTable.has('dynamaxclause')) {
-				// Old joke format we're bringing back
-				this.add('message', 'Fox only');
-				this.add('message', 'No items');
-				this.add('message', 'Final Destination');
-				return;
-			} else if (this.ruleTable.has('zmoveclause')) {
-				// Old joke format we're bringing back
-				this.add('message', 'April Fool\'s Day');
-				return;
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.species.id === 'ironthorns' && pokemon.getAbility().id === 'autorepair') {
+					const dmg = pokemon.maxhp - 1;
+					this.debug('shifu robot starts at 1 hp due to autorepair')
+					pokemon.hp -= dmg;
+				}
 			}
-
-			this.add('message', 'EVERYONE IS HERE!');
-			this.add('message', 'FIGHT!');
+			this.add(`raw|<div class='broadcast-blue'><b>The fifth iteration of Super Staff Brothers! Battle with a random team of gooners.<br /><a href="https://docs.google.com/spreadsheets/d/1HGB2YDZ-Pe2MtWa-IX8d24r4j2rxAkvIgP9NeeyNG0Y/edit?gid=200255702#gid=200255702" target="_blank">SEE THE ROSTER</a></b></div>`);
+			this.add(`raw|<div class='broadcast-red'><b>Ready?<br />BEGIN!</b></div>`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {

@@ -1713,16 +1713,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onModifyAtk(atk, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
-				this.add('-message', `Boosting attack by: ${boost}x`);
-				this.add('-message', `atk: ${atk} x mult: ${boost} = ${atk * boost}`);
 				return this.chainModify(boost);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
-				this.add('-message', `Boosting attack by: ${boost}x`);
-				this.add('-message', `spa: ${spa} x mult: ${boost} = ${spa * boost}`);
 				return this.chainModify(boost);
 			},
 			onModifySpe(spe, pokemon) {

@@ -1697,10 +1697,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Agility', source);
 		},
 		onHit(pokemon) {
-			this.add('-message', `TROUBLESHOOTING: hp: ${pokemon.hp} maxhp: ${pokemon.maxhp}`);
-			this.add('-message', `FORMULA: ${pokemon.hp - 1} / ${pokemon.maxhp / 10}`);
-			pokemon.abilityState.stacks = Math.floor((pokemon.hp - 1) / (pokemon.maxhp / 10));
-			this.damage(pokemon.hp - 1, pokemon, pokemon, this.effect);
+			let drain = pokemon.hp - 1;
+			let segment = pokemon.maxhp / 10;
+			let stacks = Math.floor(drain / segment);
+			this.damage(drain, pokemon, pokemon, this.effect);
+			pokemon.abilityState.stacks = stacks;
 			pokemon.addVolatile('turbocharge');
 			pokemon.addVolatile('protect');
 			this.add('-message', `Level ${pokemon.abilityState.stacks} Turbocharge!`);
@@ -1712,12 +1713,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onModifyAtk(atk, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
+				this.add('-message', `Boosting attack by: ${boost}x`);
+				this.add('-message', `atk: ${atk} x mult: ${boost} = ${atk * boost}`);
 				return this.chainModify(boost);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
 				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
+				this.add('-message', `Boosting attack by: ${boost}x`);
+				this.add('-message', `spa: ${spa} x mult: ${boost} = ${spa * boost}`);
 				return this.chainModify(boost);
 			},
 			onModifySpe(spe, pokemon) {
